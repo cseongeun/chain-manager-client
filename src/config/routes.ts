@@ -1,8 +1,8 @@
 const routes = {
   home: '/',
 
-  signIn: '/auth/sign-in',
-  signUp: '/auth/sign-up',
+  signIn: '/auth/signin',
+  signUp: '/auth/signup',
 
   swap: '/swap',
   liquidity: '/liquidity',

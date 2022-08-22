@@ -11,10 +11,23 @@ import { OpenEyeIcon } from '../../components/icons/open-eye';
 import routes from '../../config/routes';
 import { useRouter } from 'next/router';
 import InputFloatingLabel from '../../components/ui/forms/input-floating-label';
+import { Provider } from 'next-auth/providers';
+import {
+  getCsrfToken,
+  getProviders,
+  getSession,
+  signIn,
+} from 'next-auth/react';
 
-const SignInPage: NextPageWithLayout = () => {
+type SignInPageProps = {
+  providers: Provider[];
+  csrfToken: any;
+};
+
+function SignInPage({ providers, csrfToken }: SignInPageProps) {
   const router = useRouter();
 
+  console.log(providers);
   const [email, setEmail] = useState<string | undefined>(undefined);
   const [password, setPassword] = useState<string | undefined>(undefined);
   const [rememberMe, setRememberMe] = useState<boolean>(false);
@@ -135,11 +148,43 @@ const SignInPage: NextPageWithLayout = () => {
           </div>
         </div>
         <div className="mb-5 border-b border-dashed border-gray-200 pb-5 dark:border-gray-800 xs:mb-7 xs:pb-6" />
-
-        
+        {Object.values(providers).map((provider: any) => {
+          return (
+            <div key={provider.name}>
+              <Button
+                size="large"
+                shape="rounded"
+                fullWidth={true}
+                className="uppercase xs:mt-8 xs:tracking-widest"
+                onClick={() => signIn(provider.id)}
+              >
+                {provider.name}
+              </Button>
+            </div>
+          );
+        })}
       </AuthLayout>
     </>
   );
+}
+
+SignInPage.getInitialProps = async (context: any) => {
+  const { req, res } = context;
+
+  const session = await getSession({ req });
+
+  if (session && res && session.accessToken) {
+    res.writeHead(302, {
+      Location: '/',
+    });
+    res.end();
+    return;
+  }
+  return {
+    session: undefined,
+    providers: await getProviders(),
+    csrfToken: await getCsrfToken(context),
+  };
 };
 
 export default SignInPage;
