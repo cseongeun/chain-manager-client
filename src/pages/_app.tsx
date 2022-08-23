@@ -50,8 +50,6 @@ function CustomApp({
                 <WalletProvider>
                   {getLayout(<Component {...pageProps} />)}
                   <SettingsButton />
-                  <PageDrawer />
-                  <SettingsDrawer />
                   <ModalsContainer />
                   <DrawersContainer />
                 </WalletProvider>
