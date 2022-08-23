@@ -4,7 +4,7 @@ import { StaticImageData } from 'next/image';
 type AuthorCardProps = {
   image: StaticImageData;
   name: string;
-  role: string;
+  role?: string;
 };
 
 export default function AuthorCard({ image, name, role }: AuthorCardProps) {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import cn from 'classnames';
 import { useWindowScroll } from '@/lib/hooks/use-window-scroll';
 import { FlashIcon } from '@/components/icons/flash';
@@ -9,6 +9,7 @@ import { useIsMounted } from '@/lib/hooks/use-is-mounted';
 import { useDrawer } from '@/components/drawer-views/context';
 import Sidebar from '@/layouts/_dashboard-sidebar';
 import WalletConnect from '@/components/nft/wallet-connect';
+import { getSession, useSession } from 'next-auth/react';
 
 function NotificationButton() {
   return (

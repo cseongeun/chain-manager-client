@@ -1,11 +1,12 @@
-import NextAuth from 'next-auth';
+import NextAuth, { NextAuthOptions, User } from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
-import { api_signIn, signIn } from '../../../apis/auth';
+import { api_signIn, api_signUp } from '../../../apis/auth';
+import { api_getProfile, api_getUser } from '../../../apis/user';
 import { AuthProvider } from '../../../config/auth-providers';
 import routes from '../../../config/routes';
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [
     // GithubProvider({
@@ -33,17 +34,23 @@ export default NextAuth({
         throw Error('');
       }
 
-      const serverSignIn = await api_signIn({
+      const existUser = await api_getUser({ provider, email: identity });
+
+      if (!existUser.data) {
+        const newUser = await api_signUp({
+          provider,
+          email: identity,
+          name: identity,
+        });
+      }
+
+      const signInUser = await api_signIn({
         provider,
         email: identity,
       });
 
-      user.accessToken = serverSignIn.accessToken;
-
+      user.accessToken = signInUser.data.accessToken;
       return true;
-    },
-    async redirect({ url, baseUrl }) {
-      return routes.signIn;
     },
     async jwt({ token, user, account, profile, isNewUser }) {
       if (user) {
@@ -54,9 +61,15 @@ export default NextAuth({
     },
     async session({ session, user, token }) {
       session.accessToken = token.accessToken;
-      // session.user = getUserFromTheAPIServer(session.accessToken)
 
+      session.user = await (
+        await api_getProfile(token.accessToken as string)
+      ).data;
       return session;
     },
+    async redirect({ url, baseUrl }) {
+      return routes.home;
+    },
   },
-});
+};
+export default NextAuth(authOptions);

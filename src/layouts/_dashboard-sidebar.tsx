@@ -17,9 +17,12 @@ import { Close } from '@/components/icons/close';
 import { PlusCircle } from '@/components/icons/plus-circle';
 import { CompassIcon } from '@/components/icons/compass';
 import { InfoCircle } from '@/components/icons/info-circle';
+import { unstable_getServerSession } from 'next-auth/next';
 
 //images
 import AuthorImage from '@/assets/images/author.jpg';
+import { getSession, useSession } from 'next-auth/react';
+import { useEffect } from 'react';
 
 const menuItems = [
   {
@@ -89,6 +92,9 @@ type SidebarProps = {
 
 export default function Sidebar({ className }: SidebarProps) {
   const { closeDrawer } = useDrawer();
+  const { data: session, status } = useSession();
+  console.log('sidebar session', session);
+
   return (
     <aside
       className={cn(
@@ -114,11 +120,7 @@ export default function Sidebar({ className }: SidebarProps) {
 
       <Scrollbar style={{ height: 'calc(100% - 96px)' }}>
         <div className="px-6 pb-5 2xl:px-8">
-          <AuthorCard
-            image={AuthorImage}
-            name="Cameron Williamson"
-            role="admin"
-          />
+          <AuthorCard image={AuthorImage} name={session?.user.name as string} />
 
           <div className="mt-12">
             {menuItems.map((item, index) => (
@@ -135,4 +137,12 @@ export default function Sidebar({ className }: SidebarProps) {
       </Scrollbar>
     </aside>
   );
+}
+
+export async function getServerSideProps(context: any) {
+  // return {
+  //   props: {
+  //     session: await unstable_getServerSession(context.req, context.res),
+  //   },
+  // };
 }

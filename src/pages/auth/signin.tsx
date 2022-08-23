@@ -27,7 +27,6 @@ type SignInPageProps = {
 function SignInPage({ providers, csrfToken }: SignInPageProps) {
   const router = useRouter();
 
-  console.log(providers);
   const [email, setEmail] = useState<string | undefined>(undefined);
   const [password, setPassword] = useState<string | undefined>(undefined);
   const [rememberMe, setRememberMe] = useState<boolean>(false);

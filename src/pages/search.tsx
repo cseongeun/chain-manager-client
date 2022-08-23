@@ -139,7 +139,6 @@ function PriceRange() {
     });
   }
 
-  console.log(range);
   return (
     <div className="p-5">
       <div className="mb-4 grid grid-cols-2 gap-2">
@@ -173,7 +172,6 @@ function PriceRange() {
 
 function Status() {
   let [plan, setPlan] = useState('buy-now');
-  console.log(plan);
   return (
     <RadioGroup
       value={plan}

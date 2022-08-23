@@ -1,10 +1,11 @@
 import axios from 'axios';
+import { useSession } from 'next-auth/react';
 
-const SERVER_URL = process.env.apiServer ?? 'http://localhost:3000';
+const SERVER_URL = process.env.apiServer ?? 'http://localhost:8000';
 
-const apiInstance = (contentType?: string) => {
-  contentType = contentType || 'application/json';
+const contentType = 'application/json';
 
+export const apiInstance = () => {
   return axios.create({
     baseURL: SERVER_URL,
     headers: {
@@ -14,4 +15,13 @@ const apiInstance = (contentType?: string) => {
   });
 };
 
-export default apiInstance;
+export const apiInstanceWithToken = (accessToken: string) => {
+  return axios.create({
+    baseURL: SERVER_URL,
+    headers: {
+      'Content-Type': contentType,
+      Authorization: `Bearer ${accessToken}`,
+    },
+    withCredentials: true,
+  });
+};
