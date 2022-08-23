@@ -1,5 +1,4 @@
 import cn from 'classnames';
-import AuthorCard from '@/components/ui/author-card';
 import Logo from '@/components/ui/logo';
 import { MenuItem } from '@/components/ui/collapsible-menu';
 import Scrollbar from '@/components/ui/scrollbar';
@@ -23,68 +22,8 @@ import { unstable_getServerSession } from 'next-auth/next';
 import AuthorImage from '@/assets/images/author.jpg';
 import { getSession, useSession } from 'next-auth/react';
 import { useEffect } from 'react';
-
-const menuItems = [
-  {
-    name: 'Home',
-    icon: <HomeIcon />,
-    href: routes.home,
-  },
-  {
-    name: 'Farm',
-    icon: <FarmIcon />,
-    href: routes.farms,
-  },
-  {
-    name: 'Swap',
-    icon: <ExchangeIcon />,
-    href: routes.swap,
-  },
-  {
-    name: 'Liquidity',
-    icon: <PoolIcon />,
-    href: routes.liquidity,
-  },
-  {
-    name: 'Explore NFTs',
-    icon: <CompassIcon />,
-    href: routes.search,
-  },
-  {
-    name: 'Create NFT',
-    icon: <PlusCircle />,
-    href: routes.createNft,
-  },
-  {
-    name: 'NFT Details',
-    icon: <DiskIcon />,
-    href: routes.nftDetails,
-  },
-  {
-    name: 'Profile',
-    icon: <ProfileIcon />,
-    href: routes.profile,
-  },
-  {
-    name: 'Vote',
-    icon: <VoteIcon />,
-    href: '/vote',
-    dropdownItems: [
-      {
-        name: 'Explore',
-        href: routes.vote,
-      },
-      {
-        name: 'Vote with pools',
-        href: routes.proposals,
-      },
-      {
-        name: 'Create proposal',
-        href: routes.createProposal,
-      },
-    ],
-  },
-];
+import sidebarMenu from '../config/sidebar-menu';
+import UserCard from '@/components/ui/user-card';
 
 type SidebarProps = {
   className?: string;
@@ -93,7 +32,6 @@ type SidebarProps = {
 export default function Sidebar({ className }: SidebarProps) {
   const { closeDrawer } = useDrawer();
   const { data: session, status } = useSession();
-  console.log('sidebar session', session);
 
   return (
     <aside
@@ -120,10 +58,13 @@ export default function Sidebar({ className }: SidebarProps) {
 
       <Scrollbar style={{ height: 'calc(100% - 96px)' }}>
         <div className="px-6 pb-5 2xl:px-8">
-          <AuthorCard image={AuthorImage} name={session?.user.name as string} />
+          <UserCard
+            image={session?.user.image as string}
+            name={session?.user.name as string}
+          />
 
           <div className="mt-12">
-            {menuItems.map((item, index) => (
+            {sidebarMenu.map((item, index) => (
               <MenuItem
                 key={index}
                 name={item.name}

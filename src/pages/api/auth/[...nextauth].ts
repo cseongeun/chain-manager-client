@@ -7,6 +7,8 @@ import { AuthProvider } from '../../../config/auth-providers';
 import routes from '../../../config/routes';
 
 export const authOptions: NextAuthOptions = {
+  secret: process.env.NEXTAUTH_SECRET,
+
   // Configure one or more authentication providers
   providers: [
     // GithubProvider({
