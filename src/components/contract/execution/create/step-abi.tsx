@@ -1,7 +1,7 @@
 import { BaseSyntheticEvent, useEffect, useState } from 'react';
 import { INetwork } from '../../../../apis/network/types';
 import { useCreateContractExecutionData } from '../../../../atoms/contract/execution';
-import useGetNetworks from '../../../../lib/hooks/api-query/use-get-networks';
+import useGetNetworks from '../../../../hooks/api-query/use-get-networks';
 import type { NextPageWithLayout } from '@/types';
 import { useRouter } from 'next/router';
 import { NextSeo } from 'next-seo';
@@ -17,12 +17,25 @@ import cn from 'classnames';
 import { useCreateContractExecutionStep } from '../../../../atoms/contract/execution';
 import { useCallback } from 'react';
 
-const StepAbi = () => {
-  const [createData, setCreateData] = useCreateContractExecutionData();
+type Props = {
+  step: number;
+};
 
-  const onChangeAddress = useCallback(
-    (address: string) => {
-      setCreateData({ ...createData, address });
+const StepAbi = ({ step }: Props) => {
+  const [createData, setCreateData] = useCreateContractExecutionData();
+  const [, setCreateStep] = useCreateContractExecutionStep();
+
+  const onChangeAbiWithStep = useCallback(
+    (e: BaseSyntheticEvent) => {
+      const abi = e.target.value;
+
+      setCreateData({ ...createData, abi });
+
+      if (abi) {
+        setCreateStep(step + 1);
+      } else {
+        setCreateStep(step);
+      }
     },
     [createData]
   );
@@ -36,22 +49,9 @@ const StepAbi = () => {
         <Textarea
           placeholder="Enter contract abi,  [{ constant: true, inputs: [].... }, ... ]"
           inputClassName="md:h-32 xl:h-36"
-          onChange={(e: BaseSyntheticEvent) => {
-            const value = e.target.value;
-            // setAbiValue(e.target.value);
-            // if (value != undefined && value != '') {
-            //   setStep(4);
-            // } else {
-            //   setStep(3);
-            // }
-          }}
+          onChange={onChangeAbiWithStep}
         />
       </>
-      {/* {stepError === 3 ? (
-        <p className="leading-[1.8] text-red-500">{stepErrorMsg}</p>
-      ) : (
-        <></>
-      )} */}
     </div>
   );
 };

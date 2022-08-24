@@ -10,8 +10,8 @@ import { ResponsiveContainer, AreaChart, Area } from 'recharts';
 import Scrollbar from '@/components/ui/scrollbar';
 import { ChevronDown } from '@/components/icons/chevron-down';
 import { TopCurrencyData } from '@/data/static/top-currency-data';
-import { useBreakpoint } from '@/lib/hooks/use-breakpoint';
-import { useIsMounted } from '@/lib/hooks/use-is-mounted';
+import { useBreakpoint } from '@/hooks/use-breakpoint';
+import { useIsMounted } from '@/hooks/use-is-mounted';
 
 const COLUMNS = [
   {

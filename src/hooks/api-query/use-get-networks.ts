@@ -1,10 +1,10 @@
 import { useSession } from 'next-auth/react';
 import { useQuery } from 'react-query';
-import { api_getNetworks } from '../../../apis/network';
+import { api_getNetworks } from '../../apis/network';
 import {
   IGetNetworkQueryReq,
   IGetNetworkQueryRes,
-} from '../../../apis/network/types';
+} from '../../apis/network/types';
 
 const createKey = ({ chainId, name, testnet }: IGetNetworkQueryReq) => [
   'useGetNetworks',

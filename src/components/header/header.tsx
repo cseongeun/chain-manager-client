@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { useWindowScroll } from '@/lib/hooks/use-window-scroll';
+import { useWindowScroll } from '@/hooks/use-window-scroll';
 import Hamburger from '@/components/ui/hamburger';
 import SearchButton from '@/components/search/button';
-import { useIsMounted } from '@/lib/hooks/use-is-mounted';
+import { useIsMounted } from '@/hooks/use-is-mounted';
 import { useDrawer } from '@/components/drawer-views/context';
 import HeaderWallet from '@/components/header/header-wallet';
 

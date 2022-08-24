@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { SearchIcon } from '@/components/icons/search';
 import { Transition } from '@/components/ui/transition';
 import AnchorLink from '@/components/ui/links/anchor-link';
-import { useClickAway } from '@/lib/hooks/use-click-away';
+import { useClickAway } from '@/hooks/use-click-away';
 import { useModal } from '@/components/modal-views/context';
 import { Close } from '@/components/icons/close';
 

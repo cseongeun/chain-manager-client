@@ -1,10 +1,10 @@
 import { useSession } from 'next-auth/react';
 import { useQuery } from 'react-query';
-import { api_getContractExecutions } from '../../../apis/contract-execution';
+import { api_getContractExecutions } from '../../apis/contract-execution';
 import {
   IGetContractExecutionQueryReq,
   IGetContractExecutionsRes,
-} from '../../../apis/contract-execution/types';
+} from '../../apis/contract-execution/types';
 
 const createKey = ({
   chainId,

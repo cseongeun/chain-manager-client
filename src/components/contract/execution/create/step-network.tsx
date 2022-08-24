@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { INetwork } from '../../../../apis/network/types';
 import { useCreateContractExecutionData } from '../../../../atoms/contract/execution';
-import useGetNetworks from '../../../../lib/hooks/api-query/use-get-networks';
+import useGetNetworks from '../../../../hooks/api-query/use-get-networks';
 import type { NextPageWithLayout } from '@/types';
 import { useRouter } from 'next/router';
 import { NextSeo } from 'next-seo';
@@ -10,36 +10,50 @@ import DashboardLayout from '@/layouts/_dashboard';
 import Button from '@/components/ui/button';
 import Input from '@/components/ui/forms/input';
 import Textarea from '@/components/ui/forms/textarea';
-import Listbox from '@/components/ui/list-box';
+import Listbox, { ListboxOption } from '@/components/ui/list-box';
 import axios from 'axios';
 import { Switch } from '@headlessui/react';
 import cn from 'classnames';
 import { useCreateContractExecutionStep } from '../../../../atoms/contract/execution';
 import { useCallback } from 'react';
 import { useSession } from 'next-auth/react';
+const DEFAULT_SELECT_OPTION = { name: 'Select Network', id: 0 };
 
 interface INetworkListBoxOptions extends INetwork {
   value: string;
 }
 
-const StepNetwork = () => {
+type Props = {
+  step: number;
+};
+
+const StepNetwork = ({ step }: Props) => {
   const [createData, setCreateData] = useCreateContractExecutionData();
+  const [, setCreateStep] = useCreateContractExecutionStep();
 
   const [showTestnet, setShowTestnet] = useState<boolean | null>(false);
-  const [networkList, setNetworkList] = useState<INetworkListBoxOptions[]>([]);
+  const [networkList, setNetworkList] = useState<
+    INetworkListBoxOptions[] | ListboxOption[]
+  >([]);
 
   useGetNetworks(
     { testnet: showTestnet ? null : showTestnet },
     {
       async onSuccess(result) {
-        setNetworkList(result.data);
+        setNetworkList([DEFAULT_SELECT_OPTION].concat(result.data));
       },
     }
   );
 
-  const onChangeNetwork = useCallback(
+  const onChangeNetworkWithStep = useCallback(
     (network: INetwork) => {
       setCreateData({ ...createData, network });
+
+      if (network.id !== 0) {
+        setCreateStep(step + 1);
+      } else {
+        setCreateStep(step);
+      }
     },
     [createData]
   );
@@ -79,26 +93,9 @@ const StepNetwork = () => {
         <Listbox
           className="w-full sm:w-80"
           options={networkList}
-          selectedOption={createData?.network ?? networkList?.[0]}
-          onChange={async (data: INetworkListBoxOptions) => {
-            onChangeNetwork(data);
-
-            // if (data != nothingConfigOption[0]) {
-            //   await requestSwitchNetwork((data as any).value);
-            //   setStep(2);
-            // } else {
-            //   setStep(1);
-            // }
-          }}
+          selectedOption={createData?.network ?? DEFAULT_SELECT_OPTION}
+          onChange={onChangeNetworkWithStep}
         />
-        {/* {networkValue != nothingConfigOption[0] &&
-        networkValue.value !== chainId ? (
-          <p className="leading-[1.8] text-red-500">
-            Connect wallet to the network of your select
-          </p>
-        ) : (
-          <></>
-        )} */}
       </>
     </div>
   );

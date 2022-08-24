@@ -10,8 +10,8 @@ import ActiveLink from '@/components/ui/links/active-link';
 import AnchorLink from '@/components/ui/links/anchor-link';
 import { RangeIcon } from '@/components/icons/range-icon';
 import { ExportIcon } from '@/components/icons/export-icon';
-import { useBreakpoint } from '@/lib/hooks/use-breakpoint';
-import { useIsMounted } from '@/lib/hooks/use-is-mounted';
+import { useBreakpoint } from '@/hooks/use-breakpoint';
+import { useIsMounted } from '@/hooks/use-is-mounted';
 import { fadeInBottom } from '@/lib/framer-motion/fade-in-bottom';
 // dynamic import
 const Listbox = dynamic(() => import('@/components/ui/list-box'));

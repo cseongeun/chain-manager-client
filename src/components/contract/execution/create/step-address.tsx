@@ -1,7 +1,7 @@
 import { BaseSyntheticEvent, useEffect, useState } from 'react';
 import { INetwork } from '../../../../apis/network/types';
 import { useCreateContractExecutionData } from '../../../../atoms/contract/execution';
-import useGetNetworks from '../../../../lib/hooks/api-query/use-get-networks';
+import useGetNetworks from '../../../../hooks/api-query/use-get-networks';
 import type { NextPageWithLayout } from '@/types';
 import { useRouter } from 'next/router';
 import { NextSeo } from 'next-seo';
@@ -16,13 +16,27 @@ import { Switch } from '@headlessui/react';
 import cn from 'classnames';
 import { useCreateContractExecutionStep } from '../../../../atoms/contract/execution';
 import { useCallback } from 'react';
+import { isValidAddress } from '../../../../lib/utils/address';
 
-const StepAddress = () => {
+type Props = {
+  step: number;
+};
+
+const StepAddress = ({ step }: Props) => {
   const [createData, setCreateData] = useCreateContractExecutionData();
+  const [, setCreateStep] = useCreateContractExecutionStep();
 
-  const onChangeAddress = useCallback(
-    (address: string) => {
+  const onChangeAddressWithStep = useCallback(
+    (e: BaseSyntheticEvent) => {
+      const address = e.target.value;
+
       setCreateData({ ...createData, address });
+
+      if (isValidAddress(address)) {
+        setCreateStep(step + 1);
+      } else {
+        setCreateStep(step);
+      }
     },
     [createData]
   );
@@ -36,22 +50,9 @@ const StepAddress = () => {
         <Input
           useUppercaseLabel={false}
           placeholder="Enter contact address, 0x1f9840a85..."
-          onChange={(e: BaseSyntheticEvent) => {
-            // const value = e.target.value;
-            // setAddressValue(value);
-            // if (value != undefined && value != '') {
-            //   setStep(3);
-            // } else {
-            //   setStep(2);
-            // }
-          }}
+          onChange={onChangeAddressWithStep}
         />
       </>
-      {/* {stepError === 2 ? (
-        <p className="leading-[1.8] text-red-500">{stepErrorMsg}</p>
-      ) : (
-        <></>
-      )} */}
     </div>
   );
 };

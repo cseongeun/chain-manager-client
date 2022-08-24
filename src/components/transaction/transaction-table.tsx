@@ -13,8 +13,8 @@ import { LongArrowRight } from '@/components/icons/long-arrow-right';
 import { LongArrowLeft } from '@/components/icons/long-arrow-left';
 import { LinkIcon } from '@/components/icons/link-icon';
 import { TransactionData } from '@/data/static/transaction-data';
-import { useBreakpoint } from '@/lib/hooks/use-breakpoint';
-import { useIsMounted } from '@/lib/hooks/use-is-mounted';
+import { useBreakpoint } from '@/hooks/use-breakpoint';
+import { useIsMounted } from '@/hooks/use-is-mounted';
 
 const COLUMNS = [
   {

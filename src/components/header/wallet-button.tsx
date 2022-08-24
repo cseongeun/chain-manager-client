@@ -1,5 +1,5 @@
 import Button from '@/components/ui/button';
-import { WalletContext } from '@/lib/hooks/use-connect';
+import { WalletContext } from '@/hooks/use-connect';
 import { Menu } from '@/components/ui/menu';
 import { Transition } from '@/components/ui/transition';
 import ActiveLink from '@/components/ui/links/active-link';

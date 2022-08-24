@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import cn from 'classnames';
 import { motion } from 'framer-motion';
-import { useMeasure } from '@/lib/hooks/use-measure';
+import { useMeasure } from '@/hooks/use-measure';
 import ActiveLink from '@/components/ui/links/active-link';
 import { ChevronDown } from '@/components/icons/chevron-down';
 

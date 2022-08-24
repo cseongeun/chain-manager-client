@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useMeasure } from '@/lib/hooks/use-measure';
+import { useMeasure } from '@/hooks/use-measure';
 import { Plus } from '@/components/icons/plus';
 
 interface CollapseProps {

@@ -2,7 +2,7 @@ import type { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { NextSeo } from 'next-seo';
 import type { NextPageWithLayout } from '@/types';
 import { useState } from 'react';
-import { useCopyToClipboard } from '@/lib/hooks/use-copy-to-clipboard';
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 import DashboardLayout from '@/layouts/_dashboard';
 import Button from '@/components/ui/button';
 import Image from '@/components/ui/image';

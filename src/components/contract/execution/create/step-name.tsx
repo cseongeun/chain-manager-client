@@ -1,7 +1,7 @@
 import { BaseSyntheticEvent, useEffect, useState } from 'react';
 import { INetwork } from '../../../../apis/network/types';
 import { useCreateContractExecutionData } from '../../../../atoms/contract/execution';
-import useGetNetworks from '../../../../lib/hooks/api-query/use-get-networks';
+import useGetNetworks from '../../../../hooks/api-query/use-get-networks';
 import type { NextPageWithLayout } from '@/types';
 import { useRouter } from 'next/router';
 import { NextSeo } from 'next-seo';
@@ -17,12 +17,25 @@ import cn from 'classnames';
 import { useCreateContractExecutionStep } from '../../../../atoms/contract/execution';
 import { useCallback } from 'react';
 
-const StepName = () => {
-  const [createData, setCreateData] = useCreateContractExecutionData();
+type Props = {
+  step: number;
+};
 
-  const onChangeAddress = useCallback(
-    (address: string) => {
-      setCreateData({ ...createData, address });
+const StepName = ({ step }: Props) => {
+  const [createData, setCreateData] = useCreateContractExecutionData();
+  const [, setCreateStep] = useCreateContractExecutionStep();
+
+  const onChangeNameWithStep = useCallback(
+    (e: BaseSyntheticEvent) => {
+      const name = e.target.value;
+
+      setCreateData({ ...createData, name });
+
+      if (name) {
+        setCreateStep(step + 1);
+      } else {
+        setCreateStep(step);
+      }
     },
     [createData]
   );
@@ -38,15 +51,7 @@ const StepName = () => {
         <Input
           useUppercaseLabel={false}
           placeholder="Enter contract alias, ABT Token "
-          onChange={(e: BaseSyntheticEvent) => {
-            const value = e.target.value;
-            // setAliasValue(value);
-            // if (value != undefined && value != '') {
-            //   setStep(6);
-            // } else {
-            //   setStep(5);
-            // }
-          }}
+          onChange={onChangeNameWithStep}
         />
       </>
     </div>

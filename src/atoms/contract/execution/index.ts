@@ -32,7 +32,7 @@ export type CreateContractExecutionStep = number;
 
 const createContractExecutionStep = atom<CreateContractExecutionStep>({
   key: KEY.CREATE_CONTRACT_EXECUTION_STEP,
-  default: null,
+  default: 0,
 });
 
 export function useCreateContractExecutionStep() {

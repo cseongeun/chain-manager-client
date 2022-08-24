@@ -3,9 +3,9 @@ import { useRouter } from 'next/router';
 import cn from 'classnames';
 import { ChevronDown } from '@/components/icons/chevron-down';
 import { Tab, TabItem, TabPanels, TabPanel } from '@/components/ui/tab';
-import { useBreakpoint } from '@/lib/hooks/use-breakpoint';
-import { useIsMounted } from '@/lib/hooks/use-is-mounted';
-import { useClickAway } from '@/lib/hooks/use-click-away';
+import { useBreakpoint } from '@/hooks/use-breakpoint';
+import { useIsMounted } from '@/hooks/use-is-mounted';
+import { useClickAway } from '@/hooks/use-click-away';
 
 interface TabMenuItem {
   title: React.ReactNode;

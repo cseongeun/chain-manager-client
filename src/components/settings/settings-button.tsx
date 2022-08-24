@@ -1,6 +1,6 @@
-import { useLocalStorage } from '@/lib/hooks/use-local-storage';
-import { useDirection } from '@/lib/hooks/use-direction';
-import { useThemeColor } from '@/lib/hooks/use-theme-color';
+import { useLocalStorage } from '@/hooks/use-local-storage';
+import { useDirection } from '@/hooks/use-direction';
+import { useThemeColor } from '@/hooks/use-theme-color';
 import {
   useSettingsDrawer,
   usePageDrawer,
