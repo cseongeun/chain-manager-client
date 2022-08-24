@@ -22,6 +22,5 @@ export const apiInstanceWithToken = (accessToken: string) => {
       'Content-Type': contentType,
       Authorization: `Bearer ${accessToken}`,
     },
-    withCredentials: true,
   });
 };

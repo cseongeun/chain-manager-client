@@ -69,4 +69,23 @@ export default [
       },
     ],
   },
+  {
+    name: 'Contract',
+    icon: <VoteIcon />,
+    href: '/contract',
+    dropdownItems: [
+      {
+        name: 'Execution',
+        href: routes.contract_execution,
+      },
+      // {
+      //   name: 'Vote with pools',
+      //   href: routes.proposals,
+      // },
+      // {
+      //   name: 'Create proposal',
+      //   href: routes.createProposal,
+      // },
+    ],
+  },
 ];

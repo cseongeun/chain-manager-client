@@ -21,7 +21,7 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   pages: {
-    signIn: '/auth/signin',
+    signIn: routes.sign_in,
   },
   callbacks: {
     async signIn({ user, account, profile, credentials }) {

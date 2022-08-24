@@ -7,10 +7,12 @@ import { ChevronForward } from '@/components/icons/chevron-forward';
 import { PowerIcon } from '@/components/icons/power';
 import { useModal } from '@/components/modal-views/context';
 import { useContext } from 'react';
+import { Web3Context } from '../../lib/contexts/web3-auth-context';
 
-export default function WalletConnect() {
+export default function WalletButton() {
   const { openModal } = useModal();
-  const { address, disconnectWallet, balance } = useContext(WalletContext);
+  const { address, disconnect } = useContext(Web3Context);
+
   return (
     <>
       {address ? (
@@ -55,7 +57,7 @@ export default function WalletConnect() {
                           </span>
                         </div>
                         <div className="mt-3 font-medium uppercase tracking-wider text-gray-900 dark:text-white">
-                          {balance} ETH
+                          {/* {balance} ETH */}
                         </div>
                       </div>
                     </Menu.Item>
@@ -64,7 +66,7 @@ export default function WalletConnect() {
                     <div className="p-3">
                       <div
                         className="flex cursor-pointer items-center gap-3 rounded-lg py-2.5 px-3 text-sm font-medium text-gray-900 transition hover:bg-gray-50 dark:text-white dark:hover:bg-gray-800"
-                        onClick={disconnectWallet}
+                        onClick={() => disconnect()}
                       >
                         <PowerIcon />
                         <span className="grow uppercase">Disconnect</span>
@@ -76,9 +78,9 @@ export default function WalletConnect() {
             </Menu>
           </div>
 
-          <ActiveLink href="/create-nft">
+          {/* <ActiveLink href="/create-nft">
             <Button className="shadow-main hover:shadow-large">CREATE</Button>
-          </ActiveLink>
+          </ActiveLink> */}
         </div>
       ) : (
         <Button

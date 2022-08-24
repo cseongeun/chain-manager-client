@@ -1,8 +1,11 @@
 const routes = {
   home: '/',
 
-  signIn: '/auth/signin',
-  signUp: '/auth/signup',
+  sign_in: '/auth/signin',
+  sign_up: '/auth/signup',
+
+  contract_execution: '/contract/execution',
+  contract_execution_create: '/contract/execution/create',
 
   swap: '/swap',
   liquidity: '/liquidity',

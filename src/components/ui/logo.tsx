@@ -2,8 +2,7 @@ import Image from '@/components/ui/image';
 import AnchorLink from '@/components/ui/links/anchor-link';
 import { useIsMounted } from '@/lib/hooks/use-is-mounted';
 import { useIsDarkMode } from '@/lib/hooks/use-is-dark-mode';
-import lightLogo from '@/assets/images/logo.svg';
-import darkLogo from '@/assets/images/logo-white.svg';
+import HexlantLogo from '@/assets/images/hexlant-logo.png';
 
 const Logo: React.FC<React.SVGAttributes<{}>> = (props) => {
   const isMounted = useIsMounted();
@@ -16,12 +15,7 @@ const Logo: React.FC<React.SVGAttributes<{}>> = (props) => {
       {...props}
     >
       <span className="relative flex overflow-hidden">
-        {isMounted && isDarkMode && (
-          <Image src={darkLogo} alt="ChainManager" priority />
-        )}
-        {isMounted && !isDarkMode && (
-          <Image src={lightLogo} alt="ChainManager" priority />
-        )}
+        {isMounted && <Image src={HexlantLogo} alt="" priority />}
       </span>
     </AnchorLink>
   );

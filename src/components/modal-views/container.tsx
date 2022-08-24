@@ -9,7 +9,9 @@ import { useModal, MODAL_VIEW } from '@/components/modal-views/context';
 // dynamic imports
 const SearchView = dynamic(() => import('@/components/search/view'));
 const ShareView = dynamic(() => import('@/components/nft/share-view'));
-const SelectWallet = dynamic(() => import('@/components/nft/select-wallet'));
+const SelectWallet = dynamic(
+  () => import('@/components/modal-contents/select-wallet')
+);
 
 function renderModalContent(view: MODAL_VIEW | string) {
   switch (view) {

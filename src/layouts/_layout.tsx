@@ -10,7 +10,7 @@ import { useIsMounted } from '@/lib/hooks/use-is-mounted';
 import { useDrawer } from '@/components/drawer-views/context';
 import Hamburger from '@/components/ui/hamburger';
 import { MenuItems } from '@/layouts/_layout-menu';
-import WalletConnect from '@/components/nft/wallet-connect';
+import WalletConnect from '@/components/header/wallet-button';
 
 function NotificationButton() {
   return (

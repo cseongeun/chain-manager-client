@@ -1,15 +1,34 @@
 import Image from '@/components/ui/image';
 import metamaskLogo from '@/assets/images/metamask.svg';
-import { WalletContext } from '@/lib/hooks/use-connect';
 import { useModal } from '@/components/modal-views/context';
 import { useContext, useEffect } from 'react';
+import {
+  Web3Context,
+  Web3MetamaskErrorCode,
+} from '@/lib/contexts/web3-auth-context';
+import { useCallback } from 'react';
+import ToastMessage from '../toast/toast';
 
 export default function SelectWallet({ ...props }) {
-  const { address, connectToWallet, error } = useContext(WalletContext);
+  const { address, isConnected, connect, connectError } =
+    useContext(Web3Context);
+
   const { closeModal } = useModal();
+
   useEffect(() => {
-    if (address) closeModal();
-  }, [address, closeModal]);
+    if (isConnected || address) closeModal();
+  }, [isConnected, address, closeModal]);
+
+  const notify = useCallback(
+    (type, message) => ToastMessage({ type, message }),
+    []
+  );
+
+  useEffect(() => {
+    if (connectError) {
+      notify('error', connectError.message);
+    }
+  }, [connectError]);
 
   return (
     <div
@@ -26,7 +45,7 @@ export default function SelectWallet({ ...props }) {
 
       <div
         className="mt-12 flex h-14 w-full cursor-pointer items-center justify-between rounded-lg bg-gradient-to-l from-[#ffdc24] to-[#ff5c00] px-4 text-base text-white transition-all hover:-translate-y-0.5"
-        onClick={connectToWallet}
+        onClick={() => connect()}
       >
         <span>MetaMask</span>
         <span className="h-auto w-9">
@@ -34,10 +53,9 @@ export default function SelectWallet({ ...props }) {
         </span>
       </div>
 
-      {error && (
+      {connectError && (
         <p className="mt-3 text-center text-xs text-red-500">
-          Please install Metamask plugin in your browser in order to connect
-          wallet.
+          Something wrong when connect wallet
         </p>
       )}
     </div>
