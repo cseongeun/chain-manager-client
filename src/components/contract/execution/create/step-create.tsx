@@ -23,9 +23,15 @@ type Props = {
 };
 
 const StepCreate = ({ step }: Props) => {
+  const router = useRouter();
+
   const [createData] = useCreateContractExecutionData();
 
   const { mutate } = useCreateContractExecution();
+
+  const goToContractExecution = useCallback(() => {
+    router.push(routes.contract_execution);
+  }, []);
 
   const onClickCreateButton = useCallback(() => {
     mutate({
@@ -34,6 +40,7 @@ const StepCreate = ({ step }: Props) => {
       abi: createData.abi,
       address: createData.address,
     });
+    goToContractExecution();
   }, []);
 
   return (

@@ -2,7 +2,9 @@ import { apiInstanceWithToken } from '../apiInstance';
 import {
   IContractExecution,
   ICreateContractExecutionBodyReq,
+  IGetContractExecutionParamReq,
   IGetContractExecutionQueryReq,
+  IGetContractExecutionRes,
   IGetContractExecutionsRes,
 } from './types';
 
@@ -19,6 +21,16 @@ export const api_createContractExecution = async (
     address,
   });
 
+  return response.data;
+};
+
+export const api_getContractExecution = async (
+  accessToken: string,
+  { id }: IGetContractExecutionParamReq
+) => {
+  const response = await apiInstanceWithToken(
+    accessToken
+  ).get<IGetContractExecutionRes>(`/contract/execution/${id}`);
   return response.data;
 };
 

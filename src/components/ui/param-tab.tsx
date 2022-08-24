@@ -10,6 +10,7 @@ import { useClickAway } from '@/hooks/use-click-away';
 interface TabMenuItem {
   title: React.ReactNode;
   path: string;
+  dynamicQuery?: Record<string, string>;
 }
 
 interface ParamTabTypes {
@@ -27,15 +28,18 @@ export default function ParamTab({ tabMenu, children }: ParamTabTypes) {
   let [selectedTabIndex, setSelectedTabIndex] = useState(0);
   let [visibleMobileMenu, setVisibleMobileMenu] = useState(false);
   function handleTabChange(index: number) {
+    const dynamicQuery = tabMenu[index].dynamicQuery || {};
+
     router.push(
       {
         pathname: router.pathname,
-        query: { view: tabMenu[index].path },
+        query: { view: tabMenu[index].path, ...dynamicQuery },
       },
       undefined,
       { scroll: false, shallow: true }
     );
   }
+
   useEffect(() => {
     if (router?.query?.view) {
       setSelectedTabIndex(

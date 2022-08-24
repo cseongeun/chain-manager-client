@@ -21,7 +21,6 @@ export default function useGetContractExecutions({
   address,
 }: IGetContractExecutionQueryReq) {
   const { data: session } = useSession();
-  console.log(session);
 
   return useQuery<IGetContractExecutionsRes>(
     createKey({ chainId, name, address }),

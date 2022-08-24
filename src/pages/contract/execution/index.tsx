@@ -16,23 +16,23 @@ import { useState } from 'react';
 import { IContractExecution } from '../../../apis/contract-execution/types';
 import ContractRow from '../../../components/contract/execution/contract-row';
 
-const ContractManagementPage: NextPageWithLayout = () => {
+const ContractExecution: NextPageWithLayout = () => {
   const router = useRouter();
 
   const [list, setList] = useState<IContractExecution[]>([]);
-  const { data } = useGetContractExecutions({});
+  const { data: response } = useGetContractExecutions({});
 
   const goToCreateContractExecution = useCallback(() => {
     router.push(routes.contract_execution_create);
   }, []);
 
   useEffect(() => {
-    if (data) {
-      if (!data.success) return;
+    if (response) {
+      if (!response.success) return;
 
-      setList(data.data);
+      setList(response.data);
     }
-  }, [data]);
+  }, [response]);
 
   return (
     <>
@@ -80,6 +80,7 @@ const ContractManagementPage: NextPageWithLayout = () => {
             return (
               <ContractRow
                 key={contract.id}
+                id={contract.id}
                 network={contract.network}
                 name={contract.name}
                 address={contract.address}
@@ -93,4 +94,4 @@ const ContractManagementPage: NextPageWithLayout = () => {
   );
 };
 
-export default ContractManagementPage;
+export default ContractExecution;

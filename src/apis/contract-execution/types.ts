@@ -9,6 +9,10 @@ export interface ICreateContractExecutionBodyReq {
   address: string;
 }
 
+export interface IGetContractExecutionParamReq {
+  id: number;
+}
+
 export interface IGetContractExecutionQueryReq {
   chainId?: number;
   name?: string;
@@ -21,6 +25,11 @@ export interface IContractExecution {
   name: string;
   address: string;
   abi: string;
+}
+
+export interface IGetContractExecutionRes {
+  success: boolean;
+  data: IContractExecution;
 }
 
 export interface IGetContractExecutionsRes {
