@@ -17,12 +17,15 @@ import cn from 'classnames';
 import { useCreateContractExecutionStep } from '../../../../atoms/contract/execution';
 import { useCallback } from 'react';
 import useCreateContractExecution from '../../../../hooks/api-query/use-create-contract-execution';
+import ToastMessage from '../../../toast/toast';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   step: number;
 };
 
 const StepCreate = ({ step }: Props) => {
+  const { t } = useTranslation();
   const router = useRouter();
 
   const [createData] = useCreateContractExecutionData();
@@ -34,14 +37,32 @@ const StepCreate = ({ step }: Props) => {
   }, [router]);
 
   const onClickCreateButton = useCallback(() => {
-    mutate({
-      chainId: createData.network.chainId,
-      name: createData.name,
-      abi: createData.abi,
-      address: createData.address,
-    });
+    mutate(
+      {
+        chainId: createData.network.chainId,
+        name: createData.name,
+        abi: createData.abi,
+        address: createData.address,
+      },
+      {
+        onSuccess() {
+          ToastMessage({
+            type: 'success',
+            message: t('info.success_add_contract_execution'),
+          });
+        },
+      }
+    );
     goToContractExecution();
-  }, [createData, goToContractExecution, mutate]);
+  }, [
+    createData.abi,
+    createData.address,
+    createData.name,
+    createData.network.chainId,
+    goToContractExecution,
+    mutate,
+    t,
+  ]);
 
   return (
     <Button

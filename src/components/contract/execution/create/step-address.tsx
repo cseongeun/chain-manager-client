@@ -16,8 +16,12 @@ import { Switch } from '@headlessui/react';
 import cn from 'classnames';
 import { useCreateContractExecutionStep } from '../../../../atoms/contract/execution';
 import { useCallback } from 'react';
-import { isValidAddress } from '../../../../libs/utils/address';
+import {
+  isContractAddress,
+  isValidAddress,
+} from '../../../../libs/utils/address';
 import { useTranslation } from 'react-i18next';
+import { useProvider } from 'wagmi';
 
 type Props = {
   step: number;
@@ -26,16 +30,21 @@ type Props = {
 const StepAddress = ({ step }: Props) => {
   const { t } = useTranslation();
   const [createData, setCreateData] = useCreateContractExecutionData();
+  const provider = useProvider({ chainId: createData.network.chainId });
+
   const [, setCreateStep] = useCreateContractExecutionStep();
   const [error, setError] = useState<boolean>(false);
 
   const onChangeAddressWithStep = useCallback(
-    (e: BaseSyntheticEvent) => {
+    async (e: BaseSyntheticEvent) => {
       const address = e.target.value;
 
       setCreateData({ ...createData, address });
 
-      if (isValidAddress(address)) {
+      if (
+        isValidAddress(address) &&
+        (await isContractAddress(provider, address))
+      ) {
         setCreateStep(step + 1);
         setError(false);
       } else {
@@ -43,7 +52,7 @@ const StepAddress = ({ step }: Props) => {
         setError(address == '' ? false : true);
       }
     },
-    [createData, setCreateData, setCreateStep, step]
+    [createData, provider, setCreateData, setCreateStep, step]
   );
 
   return (
@@ -59,7 +68,9 @@ const StepAddress = ({ step }: Props) => {
         />
         {error && (
           <div className="mt-2 ml-3">
-            <span className="text-rose-700">{t('error.invalid_address')}</span>
+            <span className="text-rose-700">
+              {t('error.invalid_contract_address')}
+            </span>
           </div>
         )}
       </>
