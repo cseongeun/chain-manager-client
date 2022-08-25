@@ -17,14 +17,17 @@ import cn from 'classnames';
 import { useCreateContractExecutionStep } from '../../../../atoms/contract/execution';
 import { useCallback } from 'react';
 import { isValidAddress } from '../../../../libs/utils/address';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   step: number;
 };
 
 const StepAddress = ({ step }: Props) => {
+  const { t } = useTranslation();
   const [createData, setCreateData] = useCreateContractExecutionData();
   const [, setCreateStep] = useCreateContractExecutionStep();
+  const [error, setError] = useState<boolean>(false);
 
   const onChangeAddressWithStep = useCallback(
     (e: BaseSyntheticEvent) => {
@@ -34,11 +37,13 @@ const StepAddress = ({ step }: Props) => {
 
       if (isValidAddress(address)) {
         setCreateStep(step + 1);
+        setError(false);
       } else {
         setCreateStep(step);
+        setError(address == '' ? false : true);
       }
     },
-    [createData]
+    [createData, setCreateData, setCreateStep, step]
   );
 
   return (
@@ -52,6 +57,11 @@ const StepAddress = ({ step }: Props) => {
           placeholder="Enter contact address, 0x1f9840a85..."
           onChange={onChangeAddressWithStep}
         />
+        {error && (
+          <div className="mt-2 ml-3">
+            <span className="text-rose-700">{t('error.invalid_address')}</span>
+          </div>
+        )}
       </>
     </div>
   );

@@ -13,7 +13,13 @@ import '@/assets/css/globals.css';
 import '@/assets/css/range-slider.css';
 import { RecoilRoot } from 'recoil';
 import { SessionProvider, useSession } from 'next-auth/react';
-import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
+import {
+  chain,
+  configureChains,
+  createClient,
+  defaultChains,
+  WagmiConfig,
+} from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
 import Web3AuthProvider from '../libs/providers/web3-auth-provider';
 import { ToastContainer, Zoom } from 'react-toastify';
@@ -21,6 +27,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/router';
 import routes from '../config/routes';
 import { getDefaultProvider } from 'ethers';
+import { InjectedConnector } from 'wagmi/connectors/injected';
+import 'i18n';
 
 function Auth({ children }) {
   const router = useRouter();
@@ -31,7 +39,7 @@ function Auth({ children }) {
     if (status == 'unauthenticated' || !session.accessToken) {
       router.push(routes.sign_in);
     }
-  }, [session, status]);
+  }, [router, session, status]);
 
   return children;
 }
@@ -53,9 +61,14 @@ function CustomApp({
   const [queryClient] = useState(() => new QueryClient());
   const getLayout = Component.getLayout ?? ((page) => page);
 
+  const { chains, provider } = configureChains(defaultChains, [
+    publicProvider(),
+  ]);
+
   const wagmiClient = createClient({
     autoConnect: true,
-    provider: getDefaultProvider(),
+    connectors: [new InjectedConnector({ chains })],
+    provider,
   });
 
   return (

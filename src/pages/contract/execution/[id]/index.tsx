@@ -13,6 +13,7 @@ import { abiParser } from '@/libs/utils/parser';
 import Info from '@/components/contract/execution/detail/info';
 import { IContractExecution } from '@/apis/contract-execution/types';
 import FunctionReadList from '@/components/contract/execution/detail/function-read-list';
+import FunctionWriteList from '../../../../components/contract/execution/detail/function-write-list';
 
 const ContractExecutionDetail: NextPageWithLayout = () => {
   const router = useRouter();
@@ -75,13 +76,10 @@ const ContractExecutionDetail: NextPageWithLayout = () => {
             ]}
           >
             <TabPanel className="focus:outline-none">
-              <FunctionReadList contract={contract} readFunctions={read} />
+              <FunctionReadList contract={contract} functions={read} />
             </TabPanel>
             <TabPanel className="focus:outline-none">
-              {/* <FunctionWriteList
-                contract={detailContract}
-                writeFunctions={write}
-              /> */}
+              <FunctionWriteList contract={contract} functions={write} />
             </TabPanel>
           </ParamTab>
         </section>

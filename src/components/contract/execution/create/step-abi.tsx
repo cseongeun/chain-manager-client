@@ -16,6 +16,7 @@ import { Switch } from '@headlessui/react';
 import cn from 'classnames';
 import { useCreateContractExecutionStep } from '../../../../atoms/contract/execution';
 import { useCallback } from 'react';
+import { isObject } from 'lodash';
 
 type Props = {
   step: number;
@@ -24,6 +25,7 @@ type Props = {
 const StepAbi = ({ step }: Props) => {
   const [createData, setCreateData] = useCreateContractExecutionData();
   const [, setCreateStep] = useCreateContractExecutionStep();
+  const [error, setError] = useState<boolean>(false);
 
   const onChangeAbiWithStep = useCallback(
     (e: BaseSyntheticEvent) => {
@@ -31,13 +33,15 @@ const StepAbi = ({ step }: Props) => {
 
       setCreateData({ ...createData, abi });
 
-      if (abi) {
+      if (isObject(abi)) {
         setCreateStep(step + 1);
+        setError(false);
       } else {
         setCreateStep(step);
+        setError(abi == '' ? false : true);
       }
     },
-    [createData]
+    [createData, setCreateData, setCreateStep, step]
   );
 
   return (
@@ -51,6 +55,13 @@ const StepAbi = ({ step }: Props) => {
           inputClassName="md:h-32 xl:h-36"
           onChange={onChangeAbiWithStep}
         />
+        {error && (
+          <div className="mt-2 ml-3">
+            <span className="text-rose-700">
+              ABI는 JSON 형태의 데이터입니다.
+            </span>
+          </div>
+        )}
       </>
     </div>
   );

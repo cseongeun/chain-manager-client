@@ -15,10 +15,6 @@ import TopCurrencyTable from '@/components/top-currency/currency-table';
 import { coinSlideData } from '@/data/static/coin-slide-data';
 //images
 import AuthorImage from '@/assets/images/author.jpg';
-import { useSession } from 'next-auth/react';
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
-import routes from '../config/routes';
 
 export const getStaticProps: GetStaticProps = async () => {
   return {

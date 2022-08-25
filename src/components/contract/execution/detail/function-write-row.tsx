@@ -12,51 +12,66 @@ import Input from '@/components/ui/forms/input';
 // import { zip } from '@/libs/utils/array';
 // import { checkTypeValue, isUndefined } from '@/libs/utils/type';
 import FunctionCallResult from './function-call-result';
-import { useAccount, useContract, useContractRead, useProvider } from 'wagmi';
+import {
+  useAccount,
+  useContract,
+  useContractRead,
+  useContractWrite,
+  usePrepareContractWrite,
+  useProvider,
+} from 'wagmi';
 import { isNull } from 'lodash';
+import { ethers } from 'ethers';
 
-type FunctionReadRowProps = {
+type FucntionWriteRowProps = {
   contract: any;
   property: any;
 };
 
-const FunctionReadRow = ({ contract, property }: FunctionReadRowProps) => {
+const FunctionWriteRow = ({ contract, property }: FucntionWriteRowProps) => {
   const { isConnected } = useAccount();
   const { name, inputs, outputs, type } = property;
   const [isExpand, setIsExpand] = useState<boolean>(false);
 
-  const [queryResult, setQueryResult] = useState<any>(null);
-  const [queryArgs, setQueryArgs] = useState<any[]>(
+  const [writeHashes, setWriteHashes] = useState<string[]>([]);
+  const [writeValue, setWriteValue] = useState<number>(0);
+  const [writeArgs, setWriteArgs] = useState<any[]>(
     Array.from({ length: inputs.length }, () => null)
   );
 
-  const enableQuery = useMemo(
+  const enableWrite = useMemo(
     () =>
       isConnected &&
-      (inputs.length === 0 || queryArgs.every((e) => !isNull(e))),
-    [isConnected, inputs.length, queryArgs]
+      (inputs.length === 0 || writeArgs.every((e) => !isNull(e))),
+    [isConnected, inputs.length, writeArgs]
   );
 
-  const { refetch } = useContractRead({
+  const { write: execute } = useContractWrite({
+    mode: 'recklesslyUnprepared',
     addressOrName: contract.address,
     contractInterface: JSON.parse(contract.abi),
     functionName: property.name,
-    args: queryArgs,
+    args: writeArgs,
+    overrides: {
+      value: ethers.utils.parseEther(writeValue.toString()),
+    },
+    onSuccess(data) {
+      writeHashes.push(data.hash);
+      setWriteHashes([...writeHashes]);
+    },
   });
 
-  const query = useCallback(async () => {
-    const result = await refetch();
-    console.log(result);
-    setQueryResult(result.data.toString());
+  const write = useCallback(async () => {
+    await execute();
     setIsExpand(true);
-  }, [refetch]);
+  }, [execute]);
 
   const onChangeInputArgs = useCallback(
     (index: number, value: any) => {
-      queryArgs[index] = value == '' ? null : value;
-      setQueryArgs([...queryArgs]);
+      writeArgs[index] = value == '' ? null : value;
+      setWriteArgs([...writeArgs]);
     },
-    [queryArgs]
+    [writeArgs]
   );
 
   return (
@@ -72,10 +87,10 @@ const FunctionReadRow = ({ contract, property }: FunctionReadRowProps) => {
           <Button
             size="mini"
             shape="rounded"
-            onClick={query}
-            disabled={!enableQuery}
+            onClick={write}
+            disabled={!enableWrite}
           >
-            Query
+            Write
           </Button>
         </div>
       )}
@@ -109,7 +124,7 @@ const FunctionReadRow = ({ contract, property }: FunctionReadRowProps) => {
                             inputClassName="w-100"
                             useUppercaseLabel={false}
                             placeholder={args.type}
-                            value={queryArgs[index]}
+                            value={writeArgs[index] ?? ''}
                             onChange={(e: BaseSyntheticEvent) => {
                               const value = e.target.value;
                               onChangeInputArgs(index, value);
@@ -126,14 +141,11 @@ const FunctionReadRow = ({ contract, property }: FunctionReadRowProps) => {
         </AnimatePresence>
       )}
       <div>
-        {queryResult && isExpand ? (
+        {writeHashes && isExpand ? (
           <div className="border-t border-dashed border-gray-200 px-4 py-4 dark:border-gray-700 sm:px-8 sm:py-6">
-            {outputs.map((output: any, i: number) => (
-              <div key={i} className="mt-3 flex flex-col gap-4 xs:gap-[18px]">
-                <FunctionCallResult
-                  label={`${output.name || '_'}(${output.type})`}
-                  value={queryResult.split(',')[i]}
-                />
+            {writeHashes.map((hash: string, i: number) => (
+              <div key={i} className="mt-3 flex flex-col text-indigo-400	">
+                {hash}
               </div>
             ))}
           </div>
@@ -145,4 +157,4 @@ const FunctionReadRow = ({ contract, property }: FunctionReadRowProps) => {
   );
 };
 
-export default FunctionReadRow;
+export default FunctionWriteRow;

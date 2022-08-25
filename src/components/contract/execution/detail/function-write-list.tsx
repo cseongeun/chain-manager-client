@@ -1,17 +1,17 @@
 import { motion } from 'framer-motion';
-import FunctionReadRow from './function-read-row';
+import FunctionWriteRow from './function-write-row';
 
-type FunctionReadListProps = {
+type FunctionWriteistProps = {
   contract: any;
   functions: any;
 };
 
-const FunctionReadList = ({ contract, functions }: FunctionReadListProps) => {
+const FunctionWriteList = ({ contract, functions }: FunctionWriteistProps) => {
   return (
     <motion.div layout initial={{ borderRadius: 16 }} className="rounded-2xl">
       {functions.length > 0 ? (
         functions.map((property: any, i: number) => (
-          <FunctionReadRow key={i} contract={contract} property={property} />
+          <FunctionWriteRow key={i} contract={contract} property={property} />
         ))
       ) : (
         <div></div>
@@ -20,4 +20,4 @@ const FunctionReadList = ({ contract, functions }: FunctionReadListProps) => {
   );
 };
 
-export default FunctionReadList;
+export default FunctionWriteList;
