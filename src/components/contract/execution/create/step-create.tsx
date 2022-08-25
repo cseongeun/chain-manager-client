@@ -31,7 +31,7 @@ const StepCreate = ({ step }: Props) => {
 
   const goToContractExecution = useCallback(() => {
     router.push(routes.contract_execution);
-  }, []);
+  }, [router]);
 
   const onClickCreateButton = useCallback(() => {
     mutate({
@@ -41,7 +41,7 @@ const StepCreate = ({ step }: Props) => {
       address: createData.address,
     });
     goToContractExecution();
-  }, []);
+  }, [createData, goToContractExecution, mutate]);
 
   return (
     <Button
@@ -49,6 +49,7 @@ const StepCreate = ({ step }: Props) => {
       shape="rounded"
       fullWidth={true}
       onClick={onClickCreateButton}
+      color="info"
     >
       Create
     </Button>

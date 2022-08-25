@@ -55,7 +55,7 @@ const StepNetwork = ({ step }: Props) => {
         setCreateStep(step);
       }
     },
-    [createData]
+    [createData, setCreateData, setCreateStep, step]
   );
 
   return (

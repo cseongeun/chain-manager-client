@@ -17,12 +17,15 @@ import cn from 'classnames';
 import { useCreateContractExecutionStep } from '../../../../atoms/contract/execution';
 import { useCallback } from 'react';
 import { isObject } from 'lodash';
+import { useTranslation } from 'react-i18next';
+import { isABI } from '../../../../libs/utils/type';
 
 type Props = {
   step: number;
 };
 
 const StepAbi = ({ step }: Props) => {
+  const { t } = useTranslation();
   const [createData, setCreateData] = useCreateContractExecutionData();
   const [, setCreateStep] = useCreateContractExecutionStep();
   const [error, setError] = useState<boolean>(false);
@@ -32,8 +35,7 @@ const StepAbi = ({ step }: Props) => {
       const abi = e.target.value;
 
       setCreateData({ ...createData, abi });
-
-      if (isObject(abi)) {
+      if (isABI(abi)) {
         setCreateStep(step + 1);
         setError(false);
       } else {
@@ -57,9 +59,7 @@ const StepAbi = ({ step }: Props) => {
         />
         {error && (
           <div className="mt-2 ml-3">
-            <span className="text-rose-700">
-              ABI는 JSON 형태의 데이터입니다.
-            </span>
+            <span className="text-rose-700">{t('error.invalid_abi')}</span>
           </div>
         )}
       </>

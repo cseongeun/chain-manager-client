@@ -5,6 +5,7 @@ import SearchButton from '@/components/search/button';
 import { useIsMounted } from '@/hooks/use-is-mounted';
 import { useDrawer } from '@/components/drawer-views/context';
 import HeaderWallet from '@/components/header/header-wallet';
+import HeaderLanguage from './header-language';
 
 export function Header() {
   const { openDrawer } = useDrawer();
@@ -33,7 +34,7 @@ export function Header() {
 
           <SearchButton variant="transparent" className="dark:text-white" />
         </div>
-
+        <HeaderLanguage />
         <HeaderWallet />
       </div>
     </nav>

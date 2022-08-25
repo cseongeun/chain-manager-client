@@ -1,18 +1,26 @@
-import WalletButtonn from '@/components/header/wallet-button';
 import i18next from 'i18next';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import language from '@/config/language';
+import Listbox from '@/components/ui/list-box';
 
 const HeaderLanguage = () => {
-  const [laguage, setLanguage] = useState<string>('en');
+  const [selectedLang, setSelectedLang] = useState<any>(language[0]);
 
-  const onChangeLanguage = useCallback((e: string) => {
-    i18next.changeLanguage(e);
-    setLanguage(e);
+  const onChangeLanguage = useCallback((e: any) => {
+    console.log(e);
+    const { value } = e;
+    i18next.changeLanguage(value);
+    setSelectedLang(e);
   }, []);
+
   return (
     <div className="relative order-last flex shrink-0 items-center gap-3 sm:gap-6 lg:gap-8">
-      {/* <NotificationButton /> */}
-      {/* <WalletButtonn /> */}
+      <Listbox
+        className="sm:w-44"
+        options={language}
+        selectedOption={selectedLang}
+        onChange={onChangeLanguage}
+      />
     </div>
   );
 };
