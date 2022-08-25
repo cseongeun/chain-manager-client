@@ -1,22 +1,34 @@
+import { isUndefined } from 'lodash';
 import { useSession } from 'next-auth/react';
 import { useQuery } from 'react-query';
-import { api_getContractExecution } from '../../apis/contract-execution';
+import { api_getContractExecution } from '@/apis/contract-execution';
 import {
   IGetContractExecutionParamReq,
   IGetContractExecutionRes,
-} from '../../apis/contract-execution/types';
+} from '@/apis/contract-execution/types';
 
-const createKey = ({ id }: IGetContractExecutionParamReq) => [
-  'useGetContractExecution',
-  [id],
-];
+const queryKey = (
+  accessToken: string,
+  { id }: IGetContractExecutionParamReq
+) => ['useGetContractExecution', [accessToken, id]];
 
-export default function useGetContractExecution({
-  id,
-}: IGetContractExecutionParamReq) {
-  const { data: session } = useSession();
+export default function useGetContractExecution(
+  { id }: IGetContractExecutionParamReq,
+  callbacks?: {
+    onSuccess?: any;
+  }
+) {
+  const { data: session } = useSession({ required: true });
+  const accessToken = session?.accessToken as string;
 
-  return useQuery<IGetContractExecutionRes>(createKey({ id }), () =>
-    api_getContractExecution(session.accessToken as string, { id })
+  return useQuery<IGetContractExecutionRes>(
+    queryKey(accessToken, { id }),
+    () => api_getContractExecution(accessToken, { id }),
+    {
+      enabled: !isUndefined(accessToken),
+      onSuccess(data) {
+        callbacks && callbacks.onSuccess(data);
+      },
+    }
   );
 }

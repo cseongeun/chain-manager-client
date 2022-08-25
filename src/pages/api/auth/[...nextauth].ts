@@ -8,6 +8,7 @@ import routes from '../../../config/routes';
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
+  
 
   // Configure one or more authentication providers
   providers: [
@@ -55,6 +56,7 @@ export const authOptions: NextAuthOptions = {
       return true;
     },
     async jwt({ token, user, account, profile, isNewUser }) {
+      console.log(user);
       if (user) {
         token = { accessToken: user.accessToken };
       }

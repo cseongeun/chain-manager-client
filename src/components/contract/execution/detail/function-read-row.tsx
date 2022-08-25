@@ -1,19 +1,22 @@
 import { BaseSyntheticEvent, useState } from 'react';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import cn from 'classnames';
 import Button from '@/components/ui/button';
-// import Input from '../ui/forms/input';
-// import { zip } from '../../lib/utils/array';
-// import { checkTypeValue, isUndefined } from '../../lib/utils/type';
-// import FunctionCallResult from './function-call-result';
+import Input from '@/components/ui/forms/input';
+// import { zip } from '@/libs/utils/array';
+// import { checkTypeValue, isUndefined } from '@/libs/utils/type';
+import FunctionCallResult from './function-call-result';
 
 type FunctionReadRowProps = {
   property: any;
   handleTransaction: any;
 };
 
-export const FunctionReadRow = ({ property, handleTransaction }: any) => {
-  const [isClicked, setIsClicked] = useState(false);
+export const FunctionReadRow = ({
+  property,
+  handleTransaction,
+}: FunctionReadRowProps) => {
+  const [isExpand, setIsExpand] = useState(false);
 
   const { name, inputs, outputs, type } = property;
 
@@ -73,13 +76,13 @@ export const FunctionReadRow = ({ property, handleTransaction }: any) => {
   const resultLine = () => {
     return (
       <div>
-        {result && isClicked ? (
+        {result && isExpand ? (
           outputs.map((output: any, i: number) => (
             <div key={i} className="mt-3 flex flex-col gap-4 xs:gap-[18px]">
-              {/* <FunctionCallResult
+              <FunctionCallResult
                 label={`${output.name || '_'}(${output.type})`}
                 value={result.split(',')[i]}
-              /> */}
+              />
             </div>
           ))
         ) : (
@@ -90,81 +93,58 @@ export const FunctionReadRow = ({ property, handleTransaction }: any) => {
   };
 
   return (
-    <motion.div
-      layout
-      initial={{ borderRadius: 8 }}
-      className={cn(
-        'mb-3 rounded-lg bg-white p-5 transition-shadow duration-200 dark:bg-light-dark xs:p-6',
-        isClicked ? 'shadow-large' : 'shadow-card hover:shadow-large'
-      )}
-    >
-      <motion.div layout className="flex  flex-col-reverse justify-between">
+    <div className="relative mb-3 overflow-hidden rounded-lg bg-white shadow-card transition-all last:mb-0 hover:shadow-large dark:bg-light-dark">
+      <div
+        className="relative grid h-auto cursor-pointer grid-cols-2 items-center gap-3 py-4 sm:h-20 sm:grid-cols-3 sm:gap-6 sm:py-0 lg:grid-cols-5"
+        onClick={() => setIsExpand(!isExpand)}
+      >
         <div className="flex justify-between">
-          <h3
-            onClick={() => setIsClicked(!isClicked)}
-            className="flex-1 cursor-pointer text-base font-medium dark:text-gray-100 2xl:text-lg"
-          >
-            {name}
-          </h3>
-          {isClicked || inputs.length == 0 ? (
-            <Button
-              size="mini"
-              shape="rounded"
-              className="flex-2"
-              onClick={async () => {
-                setIsClicked(true);
-                const condition = availableProcess();
-                // if (condition) {
-                //   await execute();
-                // }
-              }}
-            >
-              Query
+          <div className="col-span-2 px-4 sm:col-auto sm:px-8">{name}</div>
+          {isExpand || inputs.length == 0 ? (
+            <Button size="mini" shape="rounded" className="flex-2">
+              Query{' '}
             </Button>
           ) : (
             <></>
           )}
         </div>
-      </motion.div>
-      {inputs.length > 0 ? (
-        isClicked ? (
-          <div className="mt-10">
-            {inputs.map((args: any, index: number) => {
-              return (
-                <div key={index} className="xs:pb mt-9 border-gray-200 pb-5">
-                  <div className={cn('relative flex')}>
-                    <span className="md:leading-loose">
-                      {args.name || '_input'}
-                    </span>
-                    <div className="absolute top-1/3 left-1/4 -mt-4 rounded-full ">
-                      {/* <Input
-                        useUppercaseLabel={false}
-                        placeholder={args.type}
-                        onChange={(e: BaseSyntheticEvent) => {
-                          const value = e.target.value;
-                          inputArgs(index, value);
-                        }}
-                      />
-                      {argsError[index] ? (
-                        <p className="text-red-500">Invalid value</p>
-                      ) : (
-                        <></>
-                      )} */}
-                    </div>
-                  </div>
+      </div>
+      <AnimatePresence initial={false}>
+        {isExpand && (
+          <motion.div
+            key="content"
+            initial="collapsed"
+            animate="open"
+            exit="collapsed"
+            variants={{
+              open: { opacity: 1, height: 'auto' },
+              collapsed: { opacity: 0, height: 0 },
+            }}
+            transition={{ duration: 0.4, ease: 'easeInOut' }}
+          >
+            <div className="border-t border-dashed border-gray-200 px-4 py-4 dark:border-gray-700 sm:px-8 sm:py-6">
+              <div className="mb-6 flex items-center justify-center rounded-lg bg-gray-100 p-3 text-center text-xs font-medium uppercase tracking-wider text-gray-900 dark:bg-gray-900 dark:text-white sm:h-13 sm:text-sm">
+                asdasd
+              </div>
+              <div className="mb-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:hidden">
+                <div className="flex flex-col gap-3 sm:gap-4">
+                  {/* <TransactionInfo
+                    label="Liquidity:"
+                    value={liquidity}
+                    className="text-xs sm:text-sm"
+                  />
+                  <TransactionInfo
+                    label="Multiplier:"
+                    value={multiplier}
+                    className="text-xs sm:text-sm"
+                  /> */}
                 </div>
-              );
-            })}
-            {resultLine()}
-          </div>
-        ) : (
-          <></>
-        )
-      ) : (
-        resultLine()
-      )}
-    </motion.div>
+              </div>
+              {/* {children} */}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 };
-
-export default FunctionReadRow;

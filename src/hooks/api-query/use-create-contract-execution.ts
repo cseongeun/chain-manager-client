@@ -1,6 +1,6 @@
 import { useMutation } from 'react-query';
-import { api_createContractExecution } from '../../apis/contract-execution';
-import { ICreateContractExecutionBodyReq } from '../../apis/contract-execution/types';
+import { api_createContractExecution } from '@/apis/contract-execution';
+import { ICreateContractExecutionBodyReq } from '@/apis/contract-execution/types';
 import { useSession } from 'next-auth/react';
 
 export default function useCreateContractExecution() {

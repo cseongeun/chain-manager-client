@@ -15,7 +15,7 @@ import { RecoilRoot } from 'recoil';
 import { SessionProvider, useSession } from 'next-auth/react';
 import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
-import Web3AuthProvider from '../lib/providers/web3-auth-provider';
+import Web3AuthProvider from '../libs/providers/web3-auth-provider';
 import { ToastContainer, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/router';
@@ -26,12 +26,11 @@ function Auth({ children }) {
   const { data: session, status } = useSession();
 
   useEffect(() => {
-    console.log(session);
     if (status === 'loading') return;
     if (status == 'unauthenticated' || !session.accessToken) {
       router.push(routes.sign_in);
     }
-  }, [status]);
+  }, [session, status]);
 
   return children;
 }
@@ -76,7 +75,11 @@ function CustomApp({
           </Head>
           <QueryClientProvider client={queryClient}>
             <Hydrate state={pageProps.dehydratedState}>
-              <SessionProvider session={session}>
+              <SessionProvider
+                session={session}
+                refetchInterval={0}
+                refetchOnWindowFocus={true}
+              >
                 <WagmiConfig client={wagmiClient}>
                   <RecoilRoot>
                     <ThemeProvider

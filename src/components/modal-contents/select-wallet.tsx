@@ -5,7 +5,7 @@ import { useContext, useEffect } from 'react';
 import {
   Web3Context,
   Web3MetamaskErrorCode,
-} from '@/lib/contexts/web3-auth-context';
+} from '@/libs/contexts/web3-auth-context';
 import { useCallback } from 'react';
 import ToastMessage from '../toast/toast';
 

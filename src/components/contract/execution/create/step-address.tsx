@@ -16,7 +16,7 @@ import { Switch } from '@headlessui/react';
 import cn from 'classnames';
 import { useCreateContractExecutionStep } from '../../../../atoms/contract/execution';
 import { useCallback } from 'react';
-import { isValidAddress } from '../../../../lib/utils/address';
+import { isValidAddress } from '../../../../libs/utils/address';
 
 type Props = {
   step: number;

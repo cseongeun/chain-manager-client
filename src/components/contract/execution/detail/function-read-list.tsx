@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { motion, AnimateSharedLayout } from 'framer-motion';
 import VoteDetailsCard from '@/components/vote/vote-details/vote-details-card';
 import { ExportIcon } from '@/components/icons/export-icon';
@@ -9,10 +8,10 @@ import { getVotesByStatus } from '@/data/static/vote-data';
 //   TransactionType,
 // } from '../../lib/hooks/blockchain/use-contract-transaction';
 import { useCallback, useEffect } from 'react';
-import FunctionReadRow from './function-read-row';
+import { FunctionReadRow } from './function-read-row';
 // import useDidMountEffect from '../../lib/hooks/use-did-mount-effect';
 
-export const FunctionReadList = ({
+const FunctionReadList = ({
   contract,
   readFunctions,
 }: {
@@ -26,20 +25,20 @@ export const FunctionReadList = ({
   // );
 
   return (
-    <AnimateSharedLayout>
-      <motion.div layout initial={{ borderRadius: 16 }} className="rounded-2xl">
-        {readFunctions.length > 0 ? (
-          readFunctions.map((property: any, i: number) => (
-            <FunctionReadRow
-              key={i}
-              property={property}
-              handleTransaction={handleTransaction}
-            />
-          ))
-        ) : (
-          <div></div>
-        )}
-      </motion.div>
-    </AnimateSharedLayout>
+    <motion.div layout initial={{ borderRadius: 16 }} className="rounded-2xl">
+      {readFunctions.length > 0 ? (
+        readFunctions.map((property: any, i: number) => (
+          <FunctionReadRow
+            key={i}
+            property={property}
+            handleTransaction={() => {}}
+          />
+        ))
+      ) : (
+        <div></div>
+      )}
+    </motion.div>
   );
 };
+
+export default FunctionReadList;

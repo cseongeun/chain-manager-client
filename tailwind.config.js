@@ -3,6 +3,10 @@ module.exports = {
     './src/pages/**/*.{js,ts,jsx,tsx}',
     './src/components/**/*.{js,ts,jsx,tsx}',
     './src/layouts/**/*.{js,ts,jsx,tsx}',
+    './src/libs/**/*.{js,ts,jsx,tsx}',
+    './src/hooks/**/*.{js,ts,jsx,tsx}',
+    './src/apis/**/*.{js,ts,jsx,tsx}',
+    './src/atoms/**/*.{js,ts,jsx,tsx}',
   ],
   darkMode: 'class',
   theme: {

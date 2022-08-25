@@ -7,7 +7,7 @@ import { ChevronForward } from '@/components/icons/chevron-forward';
 import { PowerIcon } from '@/components/icons/power';
 import { useModal } from '@/components/modal-views/context';
 import { useContext } from 'react';
-import { Web3Context } from '../../lib/contexts/web3-auth-context';
+import { Web3Context } from '../../libs/contexts/web3-auth-context';
 
 export default function WalletButton() {
   const { openModal } = useModal();

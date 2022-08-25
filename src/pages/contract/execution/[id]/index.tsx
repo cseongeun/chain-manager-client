@@ -1,26 +1,18 @@
 import type { NextPageWithLayout } from '@/types';
+import { useCopyToClipboard } from 'react-use';
 import { useRouter } from 'next/router';
 import { NextSeo } from 'next-seo';
 import DashboardLayout from '@/layouts/_dashboard';
 import ParamTab, { TabPanel } from '@/components/ui/param-tab';
 import { useEffect, useState } from 'react';
-// import { useContractStorage } from '../../../lib/hooks/use-contract-storage';
-// import { abiParser } from '../../../lib/utils/parser';
-// import FunctionReadList from '../../../components/contracts/function-read-list';
-// import FunctionWriteList from '../../../components/contracts/function-write-list';
-// import ContractDetailInfo from '../../../components/contracts/contract-detail-info';
-import { useCopyToClipboard } from 'react-use';
-import { isValidAddress } from '../../../../lib/utils/address';
-import routes from '../../../../config/routes';
-import useGetContractExecutions from '../../../../hooks/api-query/use-get-contract-executions';
-import useGetContractExecution from '../../../../hooks/api-query/use-get-contract-execution';
-import { abiParser } from '../../../../lib/utils/parser';
-import Info from '../../../../components/contract/execution/detail/info';
-import { IContractExecution } from '../../../../apis/contract-execution/types';
-import { FunctionReadList } from '../../../../components/contract/execution/detail/function-read-list';
-// import { Check } from '../../../components/icons/check';
-// import { Copy } from '../../../components/icons/copy';
-// import ClipboardCopy from '../../../components/ui/cliboard-copy';
+import { isValidAddress } from '@/libs/utils/address';
+import routes from '@/config/routes';
+import useGetContractExecutions from '@/hooks/api-query/use-get-contract-executions';
+import useGetContractExecution from '@/hooks/api-query/use-get-contract-execution';
+import { abiParser } from '@/libs/utils/parser';
+import Info from '@/components/contract/execution/detail/info';
+import { IContractExecution } from '@/apis/contract-execution/types';
+import FunctionReadList from '@/components/contract/execution/detail/function-read-list';
 
 const ContractExecutionDetail: NextPageWithLayout = () => {
   const router = useRouter();
@@ -31,21 +23,24 @@ const ContractExecutionDetail: NextPageWithLayout = () => {
   const [write, setWrite] = useState<any>([]);
 
   const [contract, setContract] = useState<IContractExecution>(undefined);
-  const { data: response } = useGetContractExecution({ id: parseInt(id) });
+  useGetContractExecution(
+    { id: parseInt(id) },
+    {
+      onSuccess(response) {
+        if (!response || !response.success) return;
 
-  useEffect(() => {
-    if (response) {
-      if (!response.success) return;
+        const { abi } = response.data;
+        console.log(abi);
 
-      const { abi } = response.data;
+        const output = abiParser(JSON.parse(abi));
 
-      const output = abiParser(abi);
-
-      setContract(response.data);
-      setRead(output.read);
-      setWrite(output.write);
+        console.log(output);
+        setContract(response.data);
+        setRead(output.read);
+        setWrite(output.write);
+      },
     }
-  }, []);
+  );
 
   return (
     <>

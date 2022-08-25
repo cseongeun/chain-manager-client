@@ -10,7 +10,7 @@ import { ExportIcon } from '@/components/icons/export-icon';
 import VotePoll from '@/components/vote/vote-details/vote-poll';
 import VoteActions from '@/components/vote/vote-details/vote-actions';
 import VoterTable from '@/components/vote/vote-details/voter-table';
-import { fadeInBottom } from '@/lib/framer-motion/fade-in-bottom';
+import { fadeInBottom } from '@/libs/framer-motion/fade-in-bottom';
 
 function VoteActionButton() {
   return (

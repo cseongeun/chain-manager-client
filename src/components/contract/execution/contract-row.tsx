@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useCallback, useContext, useState } from 'react';
 import { INetwork } from '../../../apis/network/types';
 import routes from '../../../config/routes';
-import { shortnizeString } from '../../../lib/utils/string';
+import { shortnizeString } from '../../../libs/utils/string';
 
 type ContractRowProps = {
   id: number;

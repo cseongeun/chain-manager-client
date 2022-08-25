@@ -5,14 +5,14 @@ import AuthLayout from '@/layouts/_auth-layout';
 import Button from '@/components/ui/button';
 import HexlantLogo from '@/assets/images/hexlant-logo.png';
 import Image from '@/components/ui/image';
-import AnchorLink from '../../../components/ui/links/anchor-link';
-import { CloseEyeIcon } from '../../../components/icons/close-eye';
-import { OpenEyeIcon } from '../../../components/icons/open-eye';
-import routes from '../../../config/routes';
+import AnchorLink from '@/components/ui/links/anchor-link';
+import { CloseEyeIcon } from '@/components/icons/close-eye';
+import { OpenEyeIcon } from '@/components/icons/open-eye';
+import routes from '@/config/routes';
 import { useRouter } from 'next/router';
-import InputFloatingLabel from '../../../components/ui/forms/input-floating-label';
+import InputFloatingLabel from '@/components/ui/forms/input-floating-label';
 
-const SignUpPage: NextPageWithLayout = () => {
+const SignUp: NextPageWithLayout = () => {
   const router = useRouter();
 
   const [username, setUsername] = useState<string | undefined>(undefined);
@@ -23,7 +23,7 @@ const SignUpPage: NextPageWithLayout = () => {
 
   function goToSignInPage() {
     setTimeout(() => {
-      router.push(routes.signIn);
+      router.push(routes.sign_in);
     }, 800);
   }
   return (
@@ -133,4 +133,4 @@ const SignUpPage: NextPageWithLayout = () => {
   );
 };
 
-export default SignUpPage;
+export default SignUp;

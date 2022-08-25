@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import DashboardLayout from '@/layouts/_dashboard';
-import { fadeInBottom } from '@/lib/framer-motion/fade-in-bottom';
+import { fadeInBottom } from '@/libs/framer-motion/fade-in-bottom';
 
 export default function AuthLayout({ children }: React.PropsWithChildren<{}>) {
   return (

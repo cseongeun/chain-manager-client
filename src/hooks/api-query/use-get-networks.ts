@@ -1,3 +1,4 @@
+import { isUndefined } from 'lodash';
 import { useSession } from 'next-auth/react';
 import { useQuery } from 'react-query';
 import { api_getNetworks } from '../../apis/network';
@@ -6,10 +7,10 @@ import {
   IGetNetworkQueryRes,
 } from '../../apis/network/types';
 
-const createKey = ({ chainId, name, testnet }: IGetNetworkQueryReq) => [
-  'useGetNetworks',
-  [chainId, name, testnet],
-];
+const queryKey = (
+  accessToken: string,
+  { chainId, name, testnet }: IGetNetworkQueryReq
+) => ['useGetNetworks', [accessToken, chainId, name, testnet]];
 
 export default function useGetNetworks(
   { chainId, name, testnet }: IGetNetworkQueryReq,
@@ -18,16 +19,18 @@ export default function useGetNetworks(
   }
 ) {
   const { data: session } = useSession();
+  const accessToken = session?.accessToken as string;
 
   return useQuery<IGetNetworkQueryRes>(
-    createKey({ chainId, name, testnet }),
+    queryKey(accessToken, { chainId, name, testnet }),
     () =>
-      api_getNetworks(session?.accessToken as string, {
+      api_getNetworks(accessToken, {
         chainId,
         name,
         testnet,
       }),
     {
+      enabled: !isUndefined(accessToken),
       onSuccess(data) {
         callbacks && callbacks.onSuccess(data);
       },

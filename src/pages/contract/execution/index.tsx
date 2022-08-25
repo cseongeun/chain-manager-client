@@ -20,19 +20,20 @@ const ContractExecution: NextPageWithLayout = () => {
   const router = useRouter();
 
   const [list, setList] = useState<IContractExecution[]>([]);
-  const { data: response } = useGetContractExecutions({});
+  useGetContractExecutions(
+    {},
+    {
+      onSuccess(response) {
+        if (!response || !response.success) return;
+
+        setList(response.data);
+      },
+    }
+  );
 
   const goToCreateContractExecution = useCallback(() => {
     router.push(routes.contract_execution_create);
   }, []);
-
-  useEffect(() => {
-    if (response) {
-      if (!response.success) return;
-
-      setList(response.data);
-    }
-  }, [response]);
 
   return (
     <>
