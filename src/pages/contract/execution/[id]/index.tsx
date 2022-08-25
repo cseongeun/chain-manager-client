@@ -30,11 +30,9 @@ const ContractExecutionDetail: NextPageWithLayout = () => {
         if (!response || !response.success) return;
 
         const { abi } = response.data;
-        console.log(abi);
 
         const output = abiParser(JSON.parse(abi));
 
-        console.log(output);
         setContract(response.data);
         setRead(output.read);
         setWrite(output.write);

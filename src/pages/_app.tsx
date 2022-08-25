@@ -20,6 +20,7 @@ import { ToastContainer, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/router';
 import routes from '../config/routes';
+import { getDefaultProvider } from 'ethers';
 
 function Auth({ children }) {
   const router = useRouter();
@@ -52,14 +53,9 @@ function CustomApp({
   const [queryClient] = useState(() => new QueryClient());
   const getLayout = Component.getLayout ?? ((page) => page);
 
-  const { chains, provider } = configureChains(
-    [chain.polygon],
-    [publicProvider()]
-  );
-
   const wagmiClient = createClient({
     autoConnect: true,
-    provider,
+    provider: getDefaultProvider(),
   });
 
   return (

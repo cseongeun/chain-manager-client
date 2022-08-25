@@ -9,30 +9,23 @@ import { getVotesByStatus } from '@/data/static/vote-data';
 // } from '../../lib/hooks/blockchain/use-contract-transaction';
 import { useCallback, useEffect } from 'react';
 import { FunctionReadRow } from './function-read-row';
+import { useContractRead } from 'wagmi';
 // import useDidMountEffect from '../../lib/hooks/use-did-mount-effect';
+
+type FunctionReadListProps = {
+  contract: any;
+  readFunctions: any;
+};
 
 const FunctionReadList = ({
   contract,
   readFunctions,
-}: {
-  contract: any;
-  readFunctions: any[];
-}) => {
-  // const { handleTransaction } = useContractTransaction(
-  //   contract?.contract_address,
-  //   contract?.abi,
-  //   TransactionType.READ
-  // );
-
+}: FunctionReadListProps) => {
   return (
     <motion.div layout initial={{ borderRadius: 16 }} className="rounded-2xl">
       {readFunctions.length > 0 ? (
         readFunctions.map((property: any, i: number) => (
-          <FunctionReadRow
-            key={i}
-            property={property}
-            handleTransaction={() => {}}
-          />
+          <FunctionReadRow key={i} contract={contract} property={property} />
         ))
       ) : (
         <div></div>
