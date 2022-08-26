@@ -7,6 +7,7 @@ import { ChevronDown } from '@/components/icons/chevron-down';
 export type ListboxOption = {
   id: number;
   name: string;
+  label?: string;
 };
 
 interface ListboxTypes {
@@ -45,7 +46,9 @@ export default function Listbox({
             listboxVariantClasses[variant]
           )}
         >
-          <div className="flex items-center">{selectedOption?.name}</div>
+          <div className="flex items-center">
+            {selectedOption?.label ?? selectedOption.name}
+          </div>
           <ChevronDown />
         </HeadlessListbox.Button>
         <Transition
@@ -66,7 +69,7 @@ export default function Listbox({
                         : 'hover:bg-gray-100 dark:hover:bg-gray-700/70'
                     }`}
                   >
-                    {option.name}
+                    {option?.label ?? option.name}
                   </div>
                 )}
               </HeadlessListbox.Option>

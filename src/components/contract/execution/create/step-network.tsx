@@ -1,22 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { INetwork } from '../../../../apis/network/types';
 import { useCreateContractExecutionData } from '../../../../atoms/contract/execution';
 import useGetNetworks from '../../../../hooks/api-query/use-get-networks';
-import type { NextPageWithLayout } from '@/types';
-import { useRouter } from 'next/router';
-import { NextSeo } from 'next-seo';
-import routes from '@/config/routes';
-import DashboardLayout from '@/layouts/_dashboard';
-import Button from '@/components/ui/button';
-import Input from '@/components/ui/forms/input';
-import Textarea from '@/components/ui/forms/textarea';
 import Listbox, { ListboxOption } from '@/components/ui/list-box';
-import axios from 'axios';
 import { Switch } from '@headlessui/react';
 import cn from 'classnames';
 import { useCreateContractExecutionStep } from '../../../../atoms/contract/execution';
 import { useCallback } from 'react';
-import { useSession } from 'next-auth/react';
+
 const DEFAULT_SELECT_OPTION = { name: 'Select Network', id: 0 };
 
 interface INetworkListBoxOptions extends INetwork {

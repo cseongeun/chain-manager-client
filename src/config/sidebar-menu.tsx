@@ -88,4 +88,23 @@ export default [
       // },
     ],
   },
+  {
+    name: 'Tool',
+    icon: <VoteIcon />,
+    href: '/contract',
+    dropdownItems: [
+      {
+        name: 'Multi Transfer',
+        href: routes.multi_transfer,
+      },
+      // {
+      //   name: 'Vote with pools',
+      //   href: routes.proposals,
+      // },
+      // {
+      //   name: 'Create proposal',
+      //   href: routes.createProposal,
+      // },
+    ],
+  },
 ];

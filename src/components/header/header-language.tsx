@@ -7,7 +7,6 @@ const HeaderLanguage = () => {
   const [selectedLang, setSelectedLang] = useState<any>(language[0]);
 
   const onChangeLanguage = useCallback((e: any) => {
-    console.log(e);
     const { value } = e;
     i18next.changeLanguage(value);
     setSelectedLang(e);

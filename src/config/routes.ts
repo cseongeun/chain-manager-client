@@ -11,6 +11,9 @@ const routes = {
   contract_execution_detail_read_view: '/contract/execution/[id]?view=read',
   contract_execution_detail_write_view: '/contract/execution/id?view=write',
 
+  multi_transfer: '/tool/multi_transfer',
+  multi_transfer_create: '/tool/multi_transfer/create',
+
   swap: '/swap',
   liquidity: '/liquidity',
   liquidityPosition: '/liquidity-position',
