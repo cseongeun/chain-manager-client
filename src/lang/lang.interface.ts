@@ -4,7 +4,17 @@ export interface ILangKey {
     invalid_contract_address: string;
     invalid_abi: string;
   };
-  info: {
-    success_add_contract_execution: string;
+  toast: {
+    add_contract_execution: string;
+    switch_network: string;
+  };
+  item: {
+    edit: string;
+    delete: string;
+    read: string;
+    write: string;
+    contract_name: string;
+    network: string;
+    address: string;
   };
 }

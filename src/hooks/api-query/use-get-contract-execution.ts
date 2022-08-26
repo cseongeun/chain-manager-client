@@ -16,6 +16,7 @@ export default function useGetContractExecution(
   { id }: IGetContractExecutionParamReq,
   callbacks?: {
     onSuccess?: any;
+    onError?: any;
   }
 ) {
   const { data: session } = useSession({ required: true });
@@ -28,6 +29,9 @@ export default function useGetContractExecution(
       enabled: !isUndefined(accessToken),
       onSuccess(data) {
         callbacks && callbacks.onSuccess(data);
+      },
+      onError(err) {
+        callbacks && callbacks.onError(err);
       },
     }
   );

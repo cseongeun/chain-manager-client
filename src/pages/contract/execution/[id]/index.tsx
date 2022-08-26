@@ -14,8 +14,10 @@ import Info from '@/components/contract/execution/detail/info';
 import { IContractExecution } from '@/apis/contract-execution/types';
 import FunctionReadList from '@/components/contract/execution/detail/function-read-list';
 import FunctionWriteList from '../../../../components/contract/execution/detail/function-write-list';
+import { useTranslation } from 'react-i18next';
 
 const ContractExecutionDetail: NextPageWithLayout = () => {
+  const { t } = useTranslation();
   const router = useRouter();
 
   const id = router.query.id as string;
@@ -24,6 +26,7 @@ const ContractExecutionDetail: NextPageWithLayout = () => {
   const [write, setWrite] = useState<any>([]);
 
   const [contract, setContract] = useState<IContractExecution>(undefined);
+
   useGetContractExecution(
     { id: parseInt(id) },
     {
@@ -38,6 +41,9 @@ const ContractExecutionDetail: NextPageWithLayout = () => {
         setRead(output.read);
         setWrite(output.write);
       },
+      onError(err) {
+        router.push(routes.contract_execution);
+      },
     }
   );
 
@@ -50,26 +56,26 @@ const ContractExecutionDetail: NextPageWithLayout = () => {
             <Info label="Name" value={contract?.name} className="mb-5" />
             <Info
               label="network"
-              value={contract?.network.name}
+              value={contract?.network.label}
               className="mb-5"
             />
             <div>
               <Info
                 label="address"
                 value={contract?.address}
-                // withClipboard={true}
+                withClipboard={true}
               />
             </div>
           </header>
           <ParamTab
             tabMenu={[
               {
-                title: <>Read </>,
+                title: <>{t('item.read')}</>,
                 path: 'read',
                 dynamicQuery: { id },
               },
               {
-                title: <>Write </>,
+                title: <>{t('item.write')}</>,
                 path: 'write',
                 dynamicQuery: { id },
               },

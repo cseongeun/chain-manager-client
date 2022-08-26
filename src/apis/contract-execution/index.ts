@@ -49,3 +49,13 @@ export const api_getContractExecutions = async (
   });
   return response.data;
 };
+
+export const api_deleteContractExecution = async (
+  accessToken: string,
+  { id }: IGetContractExecutionParamReq
+) => {
+  const response = await apiInstanceWithToken(
+    accessToken
+  ).delete<IGetContractExecutionRes>(`/contract/execution/${id}`);
+  return response.data;
+};

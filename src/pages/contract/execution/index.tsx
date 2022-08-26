@@ -6,7 +6,7 @@ import DashboardLayout from '@/layouts/_dashboard';
 import Button from '@/components/ui/button';
 import Image from '@/components/ui/image';
 import votePool from '@/assets/images/vote-pool.svg';
-import { useCallback, useContext, useEffect } from 'react';
+import { useCallback, useContext, useEffect, useTransition } from 'react';
 import { WalletContext } from '../../../hooks/use-connect';
 import { TerminalLine } from '../../../components/icons/terminal-line';
 import { useSession } from 'next-auth/react';
@@ -15,12 +15,14 @@ import useGetContractExecutions from '../../../hooks/api-query/use-get-contract-
 import { useState } from 'react';
 import { IContractExecution } from '../../../apis/contract-execution/types';
 import ContractRow from '../../../components/contract/execution/contract-row';
+import { useTranslation } from 'react-i18next';
 
 const ContractExecution: NextPageWithLayout = () => {
+  const { t } = useTranslation();
   const router = useRouter();
 
   const [list, setList] = useState<IContractExecution[]>([]);
-  useGetContractExecutions(
+  const { refetch } = useGetContractExecutions(
     {},
     {
       onSuccess(response) {
@@ -33,7 +35,7 @@ const ContractExecution: NextPageWithLayout = () => {
 
   const goToCreateContractExecution = useCallback(() => {
     router.push(routes.contract_execution_create);
-  }, []);
+  }, [router]);
 
   return (
     <>
@@ -68,13 +70,13 @@ const ContractExecution: NextPageWithLayout = () => {
           </header>
           <div className="mb-3 hidden grid-cols-3 gap-6 rounded-lg bg-white shadow-card dark:bg-light-dark sm:grid lg:grid-cols-3">
             <span className="px-8 py-6 text-sm font-black tracking-wider text-gray-500 dark:text-gray-300	">
-              Contract Name
+              {t('item.contract_name')}
             </span>
             <span className="px-8 py-6 text-sm font-black tracking-wider text-gray-500 dark:text-gray-300	">
-              Network
+              {t('item.network')}
             </span>
             <span className="px-8 py-6 text-sm font-black tracking-wider text-gray-500 dark:text-gray-300	">
-              Address
+              {t('item.address')}
             </span>
           </div>
           {list.map((contract: any) => {
@@ -86,6 +88,7 @@ const ContractExecution: NextPageWithLayout = () => {
                 name={contract.name}
                 address={contract.address}
                 abi={contract.abi}
+                refetch={refetch}
               />
             );
           })}

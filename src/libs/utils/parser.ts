@@ -1,5 +1,22 @@
-export const abiParser = (abi: any) => {
-  const output: any = {
+export interface IABIArgu {
+  components?: IABIArgu[];
+  internalType?: string;
+  name: string;
+  type: string;
+}
+
+export interface IABISpec {
+  name: string;
+  inputs: IABIArgu[];
+  outputs: IABIArgu[];
+  type: string;
+  stateMutability: string;
+}
+
+export const abiParser = (
+  abi: any
+): { read: IABISpec[]; write: IABISpec[] } => {
+  const output: { read: IABISpec[]; write: IABISpec[] } = {
     read: [],
     write: [],
   };

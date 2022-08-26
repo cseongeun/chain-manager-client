@@ -1,33 +1,42 @@
-import {
-  BaseSyntheticEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { BaseSyntheticEvent, useCallback, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import cn from 'classnames';
 import Button from '@/components/ui/button';
 import Input from '@/components/ui/forms/input';
-// import { zip } from '@/libs/utils/array';
-// import { checkTypeValue, isUndefined } from '@/libs/utils/type';
 import FunctionCallResult from './function-call-result';
-import { useAccount, useContract, useContractRead, useProvider } from 'wagmi';
+import {
+  useAccount,
+  useContractRead,
+  useNetwork,
+  useSwitchNetwork,
+} from 'wagmi';
 import { isNull } from 'lodash';
+import { IContractExecution } from '@/apis/contract-execution/types';
+import ToastMessage from '../../../toast/toast';
+import { useTranslation } from 'react-i18next';
+import { solidityTypeCheck } from '../../../../libs/utils/type';
 
 type FunctionReadRowProps = {
-  contract: any;
+  contract: IContractExecution;
   property: any;
 };
 
 const FunctionReadRow = ({ contract, property }: FunctionReadRowProps) => {
-  const { isConnected } = useAccount();
+  const { chainId } = contract.network;
   const { name, inputs, outputs, type } = property;
-  const [isExpand, setIsExpand] = useState<boolean>(false);
 
+  const { t } = useTranslation();
+  const { isConnected } = useAccount();
+  const { chain, chains } = useNetwork();
+  const { switchNetwork } = useSwitchNetwork();
+
+  const [isExpand, setIsExpand] = useState<boolean>(false);
   const [queryResult, setQueryResult] = useState<any>(null);
   const [queryArgs, setQueryArgs] = useState<any[]>(
     Array.from({ length: inputs.length }, () => null)
+  );
+  const [queryArgErrors, setQueryArgErrors] = useState<any[]>(
+    Array.from({ length: inputs.length }, () => false)
   );
 
   const enableQuery = useMemo(
@@ -45,11 +54,40 @@ const FunctionReadRow = ({ contract, property }: FunctionReadRowProps) => {
   });
 
   const query = useCallback(async () => {
+    if (chain?.id !== chainId) {
+      ToastMessage({
+        type: 'warn',
+        message: t('toast.switch_network'),
+      });
+
+      switchNetwork(chainId);
+      return;
+    }
+
+    let process = true;
+    inputs.map(({ type }, index: number) => {
+      const valid = solidityTypeCheck(type, queryArgs[index]);
+      if (!valid) process = false;
+
+      queryArgErrors[index] = !valid;
+      setQueryArgErrors([...queryArgErrors]);
+    });
+    if (!process) return;
+
     const result = await refetch();
-    console.log(result);
-    setQueryResult(result.data.toString());
+
+    setQueryResult(result.data);
     setIsExpand(true);
-  }, [refetch]);
+  }, [
+    chain?.id,
+    chainId,
+    inputs,
+    queryArgErrors,
+    queryArgs,
+    refetch,
+    switchNetwork,
+    t,
+  ]);
 
   const onChangeInputArgs = useCallback(
     (index: number, value: any) => {
@@ -59,8 +97,21 @@ const FunctionReadRow = ({ contract, property }: FunctionReadRowProps) => {
     [queryArgs]
   );
 
+  const onClickAddress = useCallback(
+    (hash: string) => {
+      const targetChain = chains.find(({ id }) => id === chainId);
+      if (!targetChain) return;
+
+      const explorerUrl = targetChain.blockExplorers.default.url;
+      if (!explorerUrl) return;
+
+      window.open(`${explorerUrl}/address/${hash}`, '_blank');
+    },
+    [chainId, chains]
+  );
+
   return (
-    <div className="relative mb-3 overflow-hidden rounded-lg bg-white shadow-card transition-all last:mb-0 hover:shadow-large dark:bg-light-dark">
+    <div className="relative mb-3  rounded-lg bg-white shadow-card transition-all last:mb-0 hover:shadow-large dark:bg-light-dark">
       <div
         className="relative grid h-auto cursor-pointer grid-cols-4 items-center gap-3 py-4 sm:h-20 sm:grid-cols-4 sm:gap-6 sm:py-0 "
         onClick={() => setIsExpand(!isExpand)}
@@ -104,12 +155,14 @@ const FunctionReadRow = ({ contract, property }: FunctionReadRowProps) => {
                         <span className="text-slate-500	 md:leading-loose	">
                           {args.name || '_input'}
                         </span>
-                        <div className="absolute top-1/3 left-1/4 -mt-4 rounded-full ">
+                        <div className="absolute top-1/3 left-1/4 -mt-4 w-2/4 rounded-full ">
                           <Input
-                            inputClassName="w-100"
+                            inputClassName={cn(
+                              queryArgErrors[index] ? 'dark:border-red-600' : ''
+                            )}
                             useUppercaseLabel={false}
                             placeholder={args.type}
-                            value={queryArgs[index]}
+                            value={queryArgs[index] ?? ''}
                             onChange={(e: BaseSyntheticEvent) => {
                               const value = e.target.value;
                               onChangeInputArgs(index, value);
@@ -128,14 +181,11 @@ const FunctionReadRow = ({ contract, property }: FunctionReadRowProps) => {
       <div>
         {queryResult && isExpand ? (
           <div className="border-t border-dashed border-gray-200 px-4 py-4 dark:border-gray-700 sm:px-8 sm:py-6">
-            {outputs.map((output: any, i: number) => (
-              <div key={i} className="mt-3 flex flex-col gap-4 xs:gap-[18px]">
-                <FunctionCallResult
-                  label={`${output.name || '_'}(${output.type})`}
-                  value={queryResult.split(',')[i]}
-                />
-              </div>
-            ))}
+            <FunctionCallResult
+              outputs={outputs}
+              result={queryResult}
+              onClickAddress={onClickAddress}
+            />
           </div>
         ) : (
           <></>

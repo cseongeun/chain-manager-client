@@ -6,8 +6,18 @@ const resource: ILangKey = {
     invalid_contract_address: 'invalid contract address',
     invalid_abi: 'invalid abi',
   },
-  info: {
-    success_add_contract_execution: 'contract added',
+  toast: {
+    add_contract_execution: 'contract added',
+    switch_network: 'switch network',
+  },
+  item: {
+    edit: 'edit',
+    delete: 'delete',
+    read: 'read',
+    write: 'write',
+    contract_name: 'contract name',
+    network: 'network',
+    address: 'address',
   },
 };
 

@@ -6,6 +6,7 @@ const routes = {
 
   contract_execution: '/contract/execution',
   contract_execution_create: '/contract/execution/create',
+  contract_execution_edit: '/contract/execution/edit/[id]',
   contract_execution_detail: '/contract/execution/[id]',
   contract_execution_detail_read_view: '/contract/execution/[id]?view=read',
   contract_execution_detail_write_view: '/contract/execution/id?view=write',
