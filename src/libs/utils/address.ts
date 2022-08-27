@@ -1,6 +1,8 @@
 import { ethers } from 'ethers';
 import { getAddress } from 'ethers/lib/utils';
 
+export const ZERO_ADDRESS = ethers.constants.AddressZero;
+
 export const isValidAddress = (address: string): boolean => {
   try {
     getAddress(address);

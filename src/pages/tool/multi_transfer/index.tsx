@@ -16,13 +16,16 @@ import { useState } from 'react';
 import { IContractExecution } from '../../../apis/contract-execution/types';
 import ContractRow from '../../../components/contract/execution/contract-row';
 import { useTranslation } from 'react-i18next';
+import useGetMultiTransfers from '../../../hooks/api-query/use-get-multi-transfers';
+import { IMultiTransfer } from '../../../apis/multi-transfer/types';
+import MultiTransferRow from '../../../components/tool/multi-transfer/multi-transfer-row';
 
 const MultiTransfer: NextPageWithLayout = () => {
   const { t } = useTranslation();
   const router = useRouter();
 
-  const [list, setList] = useState<IContractExecution[]>([]);
-  const { refetch } = useGetContractExecutions(
+  const [list, setList] = useState<IMultiTransfer[]>([]);
+  const { refetch } = useGetMultiTransfers(
     {},
     {
       onSuccess(response) {
@@ -68,31 +71,39 @@ const MultiTransfer: NextPageWithLayout = () => {
               </Button>
             </div>
           </header>
-          <div className="mb-3 hidden grid-cols-4 gap-6 rounded-lg bg-white shadow-card dark:bg-light-dark sm:grid lg:grid-cols-4">
-            <span className="px-8 py-6 text-sm font-black tracking-wider text-gray-500 dark:text-gray-300	">
+          <div className="mb-3 hidden grid-cols-5 gap-6 rounded-lg bg-white shadow-card dark:bg-light-dark sm:grid lg:grid-cols-5">
+            <span className="px-8 py-6 text-center text-sm font-black tracking-wider text-gray-500 dark:text-gray-300	">
               Network
             </span>
-            <span className="px-8 py-6 text-sm font-black tracking-wider text-gray-500 dark:text-gray-300	">
+            <span className="px-8 py-6 text-center text-sm font-black tracking-wider text-gray-500	dark:text-gray-300">
               Transfer
             </span>
-            <span className="px-8 py-6 text-sm font-black tracking-wider text-gray-500 dark:text-gray-300	">
+            <span className="px-8 py-6 text-center text-sm font-black tracking-wider text-gray-500	dark:text-gray-300">
               Address
               <br />
               Amount
             </span>
-            <span className="px-8 py-6 text-sm font-black tracking-wider text-gray-500 dark:text-gray-300	">
+            <span className="px-8 py-6 text-center text-sm font-black tracking-wider text-gray-500	dark:text-gray-300">
               Hash
             </span>
+            <span className="px-8 py-6 text-center text-sm font-black tracking-wider text-gray-500	dark:text-gray-300">
+              Memo
+            </span>
           </div>
-          {list.map((contract: any) => {
+          {list.map((item: IMultiTransfer) => {
             return (
-              <ContractRow
-                key={contract.id}
-                id={contract.id}
-                network={contract.network}
-                name={contract.name}
-                address={contract.address}
-                abi={contract.abi}
+              <MultiTransferRow
+                key={item.id}
+                id={item.id}
+                network={item.network}
+                hash={item.hash}
+                tokenAddress={item.tokenAddress}
+                tokenSymbol={item.tokenSymbol}
+                tokenDecimals={item.tokenDecimals}
+                totalAddress={item.totalAddress}
+                totalAmount={item.totalAmount}
+                memo={item.memo}
+                histories={item.histories}
                 refetch={refetch}
               />
             );

@@ -13,6 +13,7 @@ const routes = {
 
   multi_transfer: '/tool/multi_transfer',
   multi_transfer_create: '/tool/multi_transfer/create',
+  multi_transfer_detail: '/tool/multi_transfer/[id]',
 
   swap: '/swap',
   liquidity: '/liquidity',

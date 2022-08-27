@@ -40,7 +40,7 @@ export default function ContractRow({
         className="relative grid h-auto cursor-pointer grid-cols-2 items-center gap-3 py-4 sm:h-20 sm:grid-cols-3 sm:gap-6 sm:py-0 lg:grid-cols-3"
         onClick={goToContractDetailPage}
       >
-        <span className="px-8 py-6 text-sm tracking-wider text-gray-500 dark:text-gray-300">
+        <span className="r px-8 py-6 text-sm tracking-wider text-gray-500 dark:text-gray-300">
           {name}
         </span>
         <span className="px-8 py-6 text-sm tracking-wider text-gray-500 dark:text-gray-300">

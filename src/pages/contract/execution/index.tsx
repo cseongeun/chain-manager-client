@@ -72,10 +72,10 @@ const ContractExecution: NextPageWithLayout = () => {
             <span className="px-8 py-6 text-sm font-black tracking-wider text-gray-500 dark:text-gray-300	">
               {t('item.contract_name')}
             </span>
-            <span className="px-8 py-6 text-sm font-black tracking-wider text-gray-500 dark:text-gray-300	">
+            <span className="px-8 py-6  text-sm font-black tracking-wider text-gray-500	dark:text-gray-300">
               {t('item.network')}
             </span>
-            <span className="px-8 py-6 text-sm font-black tracking-wider text-gray-500 dark:text-gray-300	">
+            <span className="px-8 py-6 text-sm font-black tracking-wider text-gray-500	dark:text-gray-300">
               {t('item.address')}
             </span>
           </div>
