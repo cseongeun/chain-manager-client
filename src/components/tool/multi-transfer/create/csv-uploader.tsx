@@ -31,7 +31,7 @@ function CSVUploader({ setter }: CSVUploaderType) {
 
     // read file contents
     acceptedFiles.forEach((file: any) => reader.readAsBinaryString(file));
-  }, []);
+  }, [setter]);
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,

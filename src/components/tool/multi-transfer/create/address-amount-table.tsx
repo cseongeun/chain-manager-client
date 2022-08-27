@@ -36,7 +36,7 @@ function AddressAmountTable({
             </tr>
           </thead>
           <tbody>
-            {getter.map((data: any, index: number) => (
+            {getter?.map((data: any, index: number) => (
               <tr key={index}>
                 <td className="whitespace-nowrap border-t-0 border-l-0 border-r-0 ">
                   {index + 1}

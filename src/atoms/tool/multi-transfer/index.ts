@@ -17,6 +17,7 @@ export type CreateMultiTransferData = {
   memo: string;
   hash: string;
   histories: IMultiTransferHistory[];
+  data: [string, number][];
 };
 
 const createMultiTransferData = atom<CreateMultiTransferData>({

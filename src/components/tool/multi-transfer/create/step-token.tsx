@@ -29,7 +29,7 @@ const StepToken = ({ step }: Props) => {
   const provider = useProvider({ chainId: createData.network.chainId });
 
   const [error, setError] = useState<boolean>(false);
-  const [isNative, setIsNative] = useState<boolean>(false);
+  const [isToken, setIsToken] = useState<boolean>(true);
 
   const { refetch } = useToken({
     address: createData.tokenAddress,
@@ -63,13 +63,11 @@ const StepToken = ({ step }: Props) => {
     },
     [createData, provider, refetch, setCreateData, setCreateStep, step]
   );
-  useEffect(() => {
-    console.log(createData);
-  }, [createData]);
 
-  const onChangeIsNative = useCallback(() => {
-    const prev = isNative;
-    setIsNative(!isNative);
+  const onChangeIsToken = useCallback(() => {
+    const prev = isToken;
+    console.log('isToken', isToken);
+    setIsToken(!prev);
 
     if (prev) {
       setCreateData({
@@ -78,7 +76,7 @@ const StepToken = ({ step }: Props) => {
         tokenSymbol: createData.network.currency,
         tokenDecimals: 18,
       });
-      setCreateStep(step);
+      setCreateStep(step + 1);
     } else {
       setCreateData({
         ...createData,
@@ -86,10 +84,10 @@ const StepToken = ({ step }: Props) => {
         tokenSymbol: null,
         tokenDecimals: null,
       });
-      setCreateStep(step + 1);
+      setCreateStep(step);
     }
     setError(false);
-  }, [createData, isNative, setCreateData, setCreateStep, step]);
+  }, [createData, isToken, setCreateData, setCreateStep, step]);
 
   return (
     <div className="group mb-4 rounded-md bg-gray-100/90 p-5 pt-3 dark:bg-dark/60 xs:p-6 xs:pb-8">
@@ -98,13 +96,13 @@ const StepToken = ({ step }: Props) => {
           What transfer?
         </h3>
         <Switch
-          checked={isNative}
-          onChange={onChangeIsNative}
+          checked={isToken}
+          onChange={onChangeIsToken}
           className="flex items-center gap-2 text-gray-400 sm:gap-2"
         >
           <div
             className={cn(
-              isNative
+              isToken
                 ? 'bg-gray-200 dark:bg-gray-500'
                 : 'bg-gray-200 dark:bg-gray-500',
               'relative inline-flex h-[22px] w-10 items-center rounded-full transition-colors duration-300'
@@ -112,7 +110,7 @@ const StepToken = ({ step }: Props) => {
           >
             <span
               className={cn(
-                isNative
+                isToken
                   ? 'bg-white ltr:translate-x-5 rtl:-translate-x-5 dark:bg-light-dark'
                   : 'bg-white ltr:translate-x-0.5 rtl:-translate-x-0.5 dark:bg-light-dark',
                 'inline-block h-[18px] w-[18px] transform rounded-full bg-white transition-transform duration-200'
@@ -120,12 +118,12 @@ const StepToken = ({ step }: Props) => {
             />
           </div>
           <span className="mr-3 inline-flex text-xs font-medium uppercase tracking-wider text-gray-900 dark:text-white sm:text-sm">
-            is Native ({createData.network.currency})
+            is Token
           </span>
         </Switch>
       </div>
       <>
-        {!isNative ? (
+        {isToken ? (
           <>
             <Input
               useUppercaseLabel={false}

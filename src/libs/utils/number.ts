@@ -147,3 +147,20 @@ export function isLessThan(a: any, b: any): boolean {
 export function isLessThanOrEqual(a: any, b: any): boolean {
   return new BigNumber(a.toString()).isLessThanOrEqualTo(b.toString());
 }
+
+export const isNumberString = (value: string): boolean => {
+  try {
+    const number = Number(value);
+
+    if (isNaN(number)) {
+      return false;
+    }
+
+    if (!isGreaterThanOrEqual(number, 0)) {
+      return false;
+    }
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
