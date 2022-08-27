@@ -29,6 +29,7 @@ import {
 import StepNetwork from '../../../../components/tool/multi-transfer/create/step-network';
 import StepToken from '../../../../components/tool/multi-transfer/create/step-token';
 import StepData from '../../../../components/tool/multi-transfer/create/step-data';
+import StepMemo from '../../../../components/tool/multi-transfer/create/step-memo';
 
 const CreateMultiTransfer: NextPageWithLayout = () => {
   const [createStep] = useCreateMultiTransferStep();
@@ -61,7 +62,7 @@ const CreateMultiTransfer: NextPageWithLayout = () => {
             {/* Step 2 */}
             {createStep >= 2 && <StepData step={2} />}
             {/* Step 3 */}
-            {/* {createStep >= 3 && <StepName step={3} />} */}
+            {createStep >= 3 && <StepMemo step={3} />}
             {/* Step 4 */}
             {/* {createStep >= 4 && <StepCreate step={4} />} */}
           </div>

@@ -4,27 +4,31 @@ import Input from '@/components/ui/forms/input';
 import { useCreateContractExecutionStep } from '../../../../atoms/contract/execution';
 import { useCallback } from 'react';
 import { isString } from 'lodash';
+import {
+  useCreateMultiTransferData,
+  useCreateMultiTransferStep,
+} from '../../../../atoms/tool/multi-transfer';
 
 type Props = {
   step: number;
 };
 
-const StepName = ({ step }: Props) => {
-  const [createData, setCreateData] = useCreateContractExecutionData();
-  const [, setCreateStep] = useCreateContractExecutionStep();
+const StepMemo = ({ step }: Props) => {
+  const [createData, setCreateData] = useCreateMultiTransferData();
+  const [, setCreateStep] = useCreateMultiTransferStep();
   const [error, setError] = useState<boolean>(false);
 
-  const onChangeNameWithStep = useCallback(
+  const onChangeMemoWithStep = useCallback(
     (e: BaseSyntheticEvent) => {
-      const name = e.target.value;
+      const memo = e.target.value;
 
-      setCreateData({ ...createData, name });
-      if (name != '' && isString(name)) {
+      setCreateData({ ...createData, memo });
+      if (memo != '' && isString(memo)) {
         setCreateStep(step + 1);
         setError(false);
       } else {
         setCreateStep(step);
-        setError(name == '' ? false : true);
+        setError(memo == '' ? false : true);
       }
     },
     [createData, setCreateData, setCreateStep, step]
@@ -33,19 +37,17 @@ const StepName = ({ step }: Props) => {
   return (
     <div className="group mb-4 rounded-md bg-gray-100/90 p-5 pt-3 dark:bg-dark/60 xs:p-6 xs:pb-8">
       <div className="-mr-2 mb-3 flex items-center justify-between">
-        <h3 className="text-base font-medium dark:text-gray-100">
-          Name (contract Alias)
-        </h3>
+        <h3 className="text-base font-medium dark:text-gray-100">Memo</h3>
       </div>
       <>
         <Input
           useUppercaseLabel={false}
-          placeholder="Enter contract name(Alais), ABT Token "
-          onChange={onChangeNameWithStep}
+          placeholder="Enter memo "
+          onChange={onChangeMemoWithStep}
         />
       </>
     </div>
   );
 };
 
-export default StepName;
+export default StepMemo;
