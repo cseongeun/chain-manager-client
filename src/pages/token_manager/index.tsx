@@ -78,7 +78,7 @@ const TokenManager: NextPageWithLayout = () => {
         opts.mintable = createData.feature.erc1155.mintable;
         opts.supply = createData.feature.erc1155.supplyTracking;
         opts.updatableUri = createData.feature.erc1155.updatableURI;
-        opts.access = createData.accessControl.erc721;
+        opts.access = createData.accessControl.erc1155;
         break;
     }
 
