@@ -6,6 +6,10 @@ export enum TOKEN_TYPE {
   ERC721 = 'erc721',
   ERC1155 = 'erc1155',
 }
+export enum ACCESS_CONTRACT_TYPE {
+  OWNABLE = 'ownable',
+  ROLES = 'roles',
+}
 
 export interface IMetadata {
   erc20: {
@@ -35,7 +39,7 @@ export interface IFeature {
   };
   erc721: {
     mintable: boolean;
-    autoIncrementMint: boolean;
+    autoIncrementId: boolean;
     burnable: boolean;
     pausable: boolean;
     votes: boolean;
@@ -50,20 +54,34 @@ export interface IFeature {
     updatableURI: boolean;
   };
 }
+
+export interface IAccessControl {
+  erc20: ACCESS_CONTRACT_TYPE;
+  erc721: ACCESS_CONTRACT_TYPE;
+  erc1155: ACCESS_CONTRACT_TYPE;
+}
+
+export interface IInformation {
+  securityContact: string;
+  license: string;
+}
+
+export const initialType = TOKEN_TYPE.ERC20;
+
 export const initialMetaData: IMetadata = {
   erc20: {
-    name: null,
-    symbol: null,
-    initialMint: null,
+    name: 'HexlantERC20',
+    symbol: 'HEX',
+    initialMint: 0,
   },
   erc721: {
-    name: null,
-    symbol: null,
+    name: 'HexlantERC721',
+    symbol: 'HEX',
     baseURI: null,
   },
   erc1155: {
-    name: null,
-    uri: null,
+    name: 'HexlantERC1155',
+    uri: 'https://',
   },
 };
 
@@ -78,7 +96,7 @@ export const initialFeature: IFeature = {
   },
   erc721: {
     mintable: false,
-    autoIncrementMint: false,
+    autoIncrementId: false,
     burnable: false,
     pausable: false,
     votes: false,
@@ -94,6 +112,17 @@ export const initialFeature: IFeature = {
   },
 };
 
+export const initialAccessControl: IAccessControl = {
+  erc20: ACCESS_CONTRACT_TYPE.OWNABLE,
+  erc721: null,
+  erc1155: null,
+};
+
+export const initialInformation: IInformation = {
+  securityContact: null,
+  license: 'MIT',
+};
+
 const KEY = {
   CREATE_TOKEN_DATA: 'CREATE_TOKEN_DATA',
 };
@@ -103,14 +132,18 @@ export type CreateTokenData = {
   type: TOKEN_TYPE;
   metadata?: IMetadata;
   feature?: IFeature;
+  accessControl?: IAccessControl;
+  information?: IInformation;
 };
 
 const createTokenData = atom<CreateTokenData>({
   key: KEY.CREATE_TOKEN_DATA,
   default: {
-    type: TOKEN_TYPE.ERC20,
+    type: initialType,
     metadata: initialMetaData,
     feature: initialFeature,
+    accessControl: initialAccessControl,
+    information: initialInformation,
   },
 });
 

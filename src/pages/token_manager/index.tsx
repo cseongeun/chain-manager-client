@@ -1,30 +1,106 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import type { NextPageWithLayout } from '@/types';
 import { useRouter } from 'next/router';
 import { NextSeo } from 'next-seo';
 import DashboardLayout from '@/layouts/_dashboard';
 import Setting from '@/components/token-manager/setting';
 import {
+  initialAccessControl,
+  initialFeature,
+  initialInformation,
   initialMetaData,
   resetCreateTokenData,
   TOKEN_TYPE,
   useCreateTokenData,
 } from '../../atoms/token-manager';
-import { useCallback, useEffect } from 'react';
-import { deepCopy } from 'ethers/lib/utils';
+import { useCallback, useEffect, useMemo } from 'react';
+import hljs from '@/libs/contract-generator/sources/highlight';
+import {
+  buildGeneric,
+  Contract,
+  ContractBuilder,
+  printContract,
+} from '../../libs/contract-generator/sources';
+import { injectHyperlinks } from '../../libs/contract-generator/sources/inject-hyperlinks';
 
 const TokenManager: NextPageWithLayout = () => {
   const router = useRouter();
 
   const [createData, setCreateData] = useCreateTokenData();
   const resetCreateData = resetCreateTokenData();
+
+  let contract: Contract = new ContractBuilder('Token');
+
   useEffect(() => {
     console.log(createData);
   }, [createData]);
 
+  const code = useMemo(() => {
+    const opts: any = {};
+
+    switch (createData.type) {
+      case TOKEN_TYPE.ERC20:
+        opts.kind = 'ERC20';
+        opts.name = createData.metadata.erc20.name;
+        opts.symbol = createData.metadata.erc20.symbol;
+        opts.premint = createData.metadata.erc20.initialMint.toString();
+        opts.mintable = createData.feature.erc20.mintable;
+        opts.burnable = createData.feature.erc20.burnable;
+        opts.pausable = createData.feature.erc20.pausable;
+        opts.snapshots = createData.feature.erc20.snapshot;
+        opts.votes = createData.feature.erc20.votes;
+        opts.permit = createData.feature.erc20.permit;
+        opts.access = createData.accessControl.erc20;
+        console.log('erc20');
+        break;
+
+      case TOKEN_TYPE.ERC721:
+        opts.kind = 'ERC721';
+        opts.name = createData.metadata.erc721.name;
+        opts.symbol = createData.metadata.erc721.symbol;
+        opts.baseUri = createData.metadata.erc721.baseURI;
+        opts.enumerable = createData.feature.erc721.enumerable;
+        opts.uriStorage = createData.feature.erc721.uriStorage;
+        opts.burnable = createData.feature.erc721.burnable;
+        opts.pausable = createData.feature.erc721.pausable;
+        opts.mintable = createData.feature.erc721.mintable;
+        opts.incremental = createData.feature.erc721.autoIncrementId;
+        opts.votes = createData.feature.erc721.votes;
+        opts.access = createData.accessControl.erc721;
+        break;
+      case TOKEN_TYPE.ERC1155:
+        opts.kind = 'ERC1155';
+        opts.name = createData.metadata.erc1155.name;
+        opts.uri = createData.metadata.erc1155.uri;
+        opts.burnable = createData.feature.erc1155.burnable;
+        opts.pausable = createData.feature.erc1155.pausable;
+        opts.mintable = createData.feature.erc1155.mintable;
+        opts.supply = createData.feature.erc1155.supplyTracking;
+        opts.updatableUri = createData.feature.erc1155.updatableURI;
+        opts.access = createData.accessControl.erc721;
+        break;
+    }
+
+    opts.securityContact = createData.information.securityContact;
+    opts.license = createData.information.license;
+
+    contract = buildGeneric(opts);
+
+    const code = printContract(contract);
+    const highlight = injectHyperlinks(hljs.highlight('solidity', code).value);
+    return highlight;
+  }, [createData]);
+
   const onChangeTokenType = useCallback(
     (type: TOKEN_TYPE) => {
-      resetCreateData();
-      setCreateData({ ...createData, type, metadata: initialMetaData });
+      setCreateData({
+        ...createData,
+        type,
+        metadata: initialMetaData,
+        feature: initialFeature,
+        accessControl: initialAccessControl,
+        information: initialInformation,
+      });
     },
     [createData, resetCreateData, setCreateData]
   );
@@ -50,7 +126,12 @@ const TokenManager: NextPageWithLayout = () => {
   );
 
   const onChangeFeature = useCallback(
-    (key: string, state: boolean) => {
+    (
+      key: string,
+      state: boolean,
+      requireKey?: string,
+      oppositeKey?: string
+    ) => {
       const type = createData.type;
 
       setCreateData({
@@ -60,10 +141,45 @@ const TokenManager: NextPageWithLayout = () => {
           {
             [`${type}`]: Object.assign(
               { ...createData.feature[type] },
-              { [`${key}`]: state }
+              { [`${key}`]: state },
+              { [`${requireKey}`]: true },
+              { [`${oppositeKey}`]: false }
             ),
           }
         ),
+      });
+    },
+    [createData, setCreateData]
+  );
+
+  const onChangeAccessControl = useCallback(
+    (value: string) => {
+      const type = createData.type;
+
+      setCreateData({
+        ...createData,
+        accessControl: Object.assign(
+          { ...createData.accessControl },
+          {
+            [`${type}`]: value,
+          }
+        ),
+      });
+    },
+    [createData, setCreateData]
+  );
+
+  const onChangeInformation = useCallback(
+    (key: string, value: string) => {
+      const type = createData.type;
+
+      setCreateData({
+        ...createData,
+        information: Object.assign(
+          { ...createData.information },
+          { [`${key}`]: value }
+        ),
+        [`${key}`]: value,
       });
     },
     [createData, setCreateData]
@@ -79,151 +195,20 @@ const TokenManager: NextPageWithLayout = () => {
               onChangeTokenType={onChangeTokenType}
               onChangeMetadata={onChangeMetadata}
               onChangeFeature={onChangeFeature}
+              onChangeAccessControl={onChangeAccessControl}
+              onChangeInformation={onChangeInformation}
             />
           </div>
-
-          <div className="2xl:ltr:pl-10 2xl:rtl:pr-10 4xl:ltr:pl-12 4xl:rtl:pr-12">
-            <div className="relative z-10 mb-6 flex items-center justify-between">
-              <span className="text-xs font-medium text-gray-900 dark:text-white sm:text-sm"></span>
-            </div>
+          <div className="output flex grow flex-col overflow-auto">
+            <pre className="flex grow basis-0 flex-col overflow-auto">
+              <code
+                className="hljs grow overflow-auto p-4"
+                dangerouslySetInnerHTML={{ __html: code }}
+              ></code>
+            </pre>
           </div>
         </div>
       </DashboardLayout>
-      {/* <DashboardLayout>
-        <section className="mx-auto w-full max-w-[1160px] text-sm sm:pt-10 4xl:pt-14">
-          <header className="mb-8 flex flex-col gap-4 rounded-lg bg-white p-5 py-6 shadow-card dark:bg-light-dark xs:p-6 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-start gap-4 xs:items-center xs:gap-3 xl:gap-4">
-              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-gray-100 dark:bg-dark">
-                <Image alt="Vote Pool" src={votePool} width={32} height={32} />
-              </div>
-              <div>
-                <h2 className="mb-2 text-base font-medium uppercase dark:text-gray-100 xl:text-lg">
-                  You have 100 votes
-                </h2>
-                <p className="leading-relaxed text-gray-600 dark:text-gray-400">
-                  You need ChainManager or ChainManager tokens to participate in
-                  governance.
-                </p>
-              </div>
-            </div>
-            <div className="shrink-0">
-              <Button
-                shape="rounded"
-                fullWidth={true}
-                className="uppercase"
-                onClick={() => goToCreateProposalPage()}
-              >
-                Create Proposal
-              </Button>
-            </div>
-          </header>
-          <ParamTab
-            tabMenu={[
-              {
-                title: (
-                  <>
-                    Active{' '}
-                    {totalActiveVote > 0 && (
-                      <span className="ltr:ml-0.5 rtl:mr-0.5 ltr:md:ml-1.5 rtl:md:mr-1.5 ltr:lg:ml-2 rtl:lg:mr-2">
-                        {totalActiveVote}
-                      </span>
-                    )}
-                  </>
-                ),
-                path: 'active',
-              },
-              {
-                title: (
-                  <>
-                    Off-Chain{' '}
-                    {totalOffChainVote > 0 && (
-                      <span className="ltr:ml-0.5 rtl:mr-0.5 ltr:md:ml-1.5 rtl:md:mr-1.5 ltr:lg:ml-2 rtl:lg:mr-2">
-                        {totalOffChainVote}
-                      </span>
-                    )}
-                  </>
-                ),
-                path: 'off-chain',
-              },
-              {
-                title: (
-                  <>
-                    Executable{' '}
-                    {totalExecutableVote > 0 && (
-                      <span className="ltr:ml-0.5 rtl:mr-0.5 ltr:md:ml-1.5 rtl:md:mr-1.5 ltr:lg:ml-2 rtl:lg:mr-2">
-                        {totalExecutableVote}
-                      </span>
-                    )}
-                  </>
-                ),
-                path: 'executable',
-              },
-              {
-                title: (
-                  <>
-                    Past{' '}
-                    {totalPastVote > 0 && (
-                      <span className="ltr:ml-0.5 rtl:mr-0.5 ltr:md:ml-1.5 rtl:md:mr-1.5 ltr:lg:ml-2 rtl:lg:mr-2">
-                        {totalPastVote}
-                      </span>
-                    )}
-                  </>
-                ),
-                path: 'past',
-              },
-            ]}
-          >
-            <TabPanel className="focus:outline-none">
-              <VoteList voteStatus={'active'} />
-            </TabPanel>
-            <TabPanel className="focus:outline-none">
-              <>
-                <div className="mb-6 rounded-lg border-2 border-gray-900 bg-white p-5 dark:border-gray-700 dark:bg-light-dark xs:py-6 lg:px-8 lg:py-6">
-                  <div className="mb-3 flex flex-col gap-3 xs:mb-4 sm:gap-4 md:flex-row md:items-center md:justify-between">
-                    <h3 className="flex items-center gap-4 text-base font-semibold dark:text-gray-100">
-                      <span className="inline-block rounded-3xl bg-gray-900 px-2.5 py-0.5 text-sm font-medium text-white">
-                        Tip
-                      </span>{' '}
-                      Vote gas-free + earn rewards
-                    </h3>
-                    <div className="flex items-center gap-4 text-gray-900 dark:text-gray-100">
-                      <a
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href="https://snapshot.org/#/"
-                        className="inline-flex items-center gap-2 text-gray-900 transition-opacity duration-200 hover:underline hover:opacity-90 dark:text-gray-100"
-                      >
-                        Go to Snapshot <ExportIcon className="h-auto w-3" />
-                      </a>
-                      <a
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href="#"
-                        className="inline-flex items-center gap-2 text-gray-900 transition-opacity duration-200 hover:underline hover:opacity-90 dark:text-gray-100"
-                      >
-                        Learn more <ExportIcon className="h-auto w-3" />
-                      </a>
-                    </div>
-                  </div>
-                  <p className="leading-loose text-gray-600 dark:text-gray-400">
-                    In order to vote on SnapShot, you need to have ptPOOL
-                    tokens. You can obtain them by depositing your token icon
-                    POOL into the POOL Pool . By doing so, you will be eligible
-                    to vote gas-free and have a chance to win a weekly prize.
-                  </p>
-                </div>
-                <VoteList voteStatus={'off-chain'} />
-              </>
-            </TabPanel>
-            <TabPanel className="focus:outline-none">
-              <VoteList voteStatus={'executable'} />
-            </TabPanel>
-            <TabPanel className="focus:outline-none">
-              <VoteList voteStatus={'past'} />
-            </TabPanel>
-          </ParamTab>
-        </section>
-      </DashboardLayout> */}
     </>
   );
 };
