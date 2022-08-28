@@ -88,6 +88,7 @@ export default [
       // },
     ],
   },
+
   {
     name: 'Tool',
     icon: <VoteIcon />,
@@ -107,4 +108,28 @@ export default [
       // },
     ],
   },
+  {
+    name: 'Token Manager',
+    icon: <PlusCircle />,
+    href: routes.token_manager,
+  },
+  // {
+  //   name: 'Token Manager',
+  //   icon: <VoteIcon />,
+  //   href: '/token_manager',
+  //   dropdownItems: [
+  //     {
+  //       name: 'Multi ',
+  //       href: routes.multi_transfer,
+  //     },
+  //     // {
+  //     //   name: 'Vote with pools',
+  //     //   href: routes.proposals,
+  //     // },
+  //     // {
+  //     //   name: 'Create proposal',
+  //     //   href: routes.createProposal,
+  //     // },
+  //   ],
+  // },
 ];
