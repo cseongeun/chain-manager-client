@@ -22,6 +22,7 @@ import {
   printContract,
 } from '../../libs/contract-generator/sources';
 import { injectHyperlinks } from '../../libs/contract-generator/sources/inject-hyperlinks';
+import Button from '../../components/ui/button';
 
 const TokenManager: NextPageWithLayout = () => {
   const router = useRouter();
@@ -88,7 +89,7 @@ const TokenManager: NextPageWithLayout = () => {
 
     const code = printContract(contract);
     const highlight = injectHyperlinks(hljs.highlight('solidity', code).value);
-    return highlight;
+    return code;
   }, [createData]);
 
   const onChangeTokenType = useCallback(
@@ -199,13 +200,27 @@ const TokenManager: NextPageWithLayout = () => {
               onChangeInformation={onChangeInformation}
             />
           </div>
-          <div className="output flex grow flex-col overflow-auto">
-            <pre className="flex grow basis-0 flex-col overflow-auto">
-              <code
-                className="hljs grow overflow-auto p-4"
-                dangerouslySetInnerHTML={{ __html: code }}
-              ></code>
-            </pre>
+
+          <div className="mx-5 mt-5">
+            <div className="text-right">
+              <Button
+                shape="rounded"
+                variant="solid"
+                color="info"
+                className=" dark:bg-gray-800"
+              >
+                DEPLOY
+              </Button>
+            </div>
+            <div className="mt-5 flex grow flex-col  rounded-lg  bg-white p-5 shadow-card dark:bg-light-dark">
+              <pre className="flex grow basis-0 flex-col ">
+                <code>{code}</code>
+                {/* <code
+                  className={classNames('grow overflow-auto p-4', hljs)}
+                  dangerouslySetInnerHTML={{ __html: code }}
+                ></code> */}
+              </pre>
+            </div>
           </div>
         </div>
       </DashboardLayout>
