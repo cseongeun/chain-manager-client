@@ -30,6 +30,7 @@ const StepData = ({ step }: Props) => {
   const checkValidateData = useCallback(
     (temp: any, tempError: any, index: number) => {
       const [address, amount] = temp;
+      console.log(address, amount);
       try {
         const validAddress = isValidAddress(address);
 
@@ -107,7 +108,7 @@ const StepData = ({ step }: Props) => {
 
       setCreateData({ ...createData, data });
 
-      checkValidateData(data, error, index);
+      checkValidateData(data[index], error, index);
     },
     [checkValidateData, createData, error, setCreateData]
   );
