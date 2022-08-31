@@ -10,65 +10,65 @@ import { PlusCircle } from '@/components/icons/plus-circle';
 import { CompassIcon } from '@/components/icons/compass';
 
 export default [
-  {
-    name: 'Home',
-    icon: <HomeIcon />,
-    href: routes.home,
-  },
-  {
-    name: 'Farm',
-    icon: <FarmIcon />,
-    href: routes.farms,
-  },
-  {
-    name: 'Swap',
-    icon: <ExchangeIcon />,
-    href: routes.swap,
-  },
-  {
-    name: 'Liquidity',
-    icon: <PoolIcon />,
-    href: routes.liquidity,
-  },
-  {
-    name: 'Explore NFTs',
-    icon: <CompassIcon />,
-    href: routes.search,
-  },
-  {
-    name: 'Create NFT',
-    icon: <PlusCircle />,
-    href: routes.createNft,
-  },
-  {
-    name: 'NFT Details',
-    icon: <DiskIcon />,
-    href: routes.nftDetails,
-  },
-  {
-    name: 'Profile',
-    icon: <ProfileIcon />,
-    href: routes.profile,
-  },
-  {
-    name: 'Vote',
-    icon: <VoteIcon />,
-    href: '/vote',
-    dropdownItems: [
-      {
-        name: 'Explore',
-        href: routes.vote,
-      },
-      {
-        name: 'Vote with pools',
-        href: routes.proposals,
-      },
-      {
-        name: 'Create proposal',
-        href: routes.createProposal,
-      },
-    ],
-  },
+  // {
+  //   name: 'Home',
+  //   icon: <HomeIcon />,
+  //   href: routes.home,
+  // },
+  // {
+  //   name: 'Farm',
+  //   icon: <FarmIcon />,
+  //   href: routes.farms,
+  // },
+  // {
+  //   name: 'Swap',
+  //   icon: <ExchangeIcon />,
+  //   href: routes.swap,
+  // },
+  // {
+  //   name: 'Liquidity',
+  //   icon: <PoolIcon />,
+  //   href: routes.liquidity,
+  // },
+  // {
+  //   name: 'Explore NFTs',
+  //   icon: <CompassIcon />,
+  //   href: routes.search,
+  // },
+  // {
+  //   name: 'Create NFT',
+  //   icon: <PlusCircle />,
+  //   href: routes.createNft,
+  // },
+  // {
+  //   name: 'NFT Details',
+  //   icon: <DiskIcon />,
+  //   href: routes.nftDetails,
+  // },
+  // {
+  //   name: 'Profile',
+  //   icon: <ProfileIcon />,
+  //   href: routes.profile,
+  // },
+  // {
+  //   name: 'Vote',
+  //   icon: <VoteIcon />,
+  //   href: '/vote',
+  //   dropdownItems: [
+  //     {
+  //       name: 'Explore',
+  //       href: routes.vote,
+  //     },
+  //     {
+  //       name: 'Vote with pools',
+  //       href: routes.proposals,
+  //     },
+  //     {
+  //       name: 'Create proposal',
+  //       href: routes.createProposal,
+  //     },
+  //   ],
+  // },
   {
     name: 'Contract',
     icon: <VoteIcon />,
@@ -88,31 +88,30 @@ export default [
       // },
     ],
   },
-
-  {
-    name: 'Tool',
-    icon: <VoteIcon />,
-    href: '/contract',
-    dropdownItems: [
-      {
-        name: 'Multi Transfer',
-        href: routes.multi_transfer,
-      },
-      // {
-      //   name: 'Vote with pools',
-      //   href: routes.proposals,
-      // },
-      // {
-      //   name: 'Create proposal',
-      //   href: routes.createProposal,
-      // },
-    ],
-  },
-  {
-    name: 'Token Manager',
-    icon: <PlusCircle />,
-    href: routes.token_manager,
-  },
+  // {
+  //   name: 'Tool',
+  //   icon: <VoteIcon />,
+  //   href: '/contract',
+  //   dropdownItems: [
+  //     {
+  //       name: 'Multi Transfer',
+  //       href: routes.multi_transfer,
+  //     },
+  //     // {
+  //     //   name: 'Vote with pools',
+  //     //   href: routes.proposals,
+  //     // },
+  //     // {
+  //     //   name: 'Create proposal',
+  //     //   href: routes.createProposal,
+  //     // },
+  //   ],
+  // },
+  // {
+  //   name: 'Token Manager',
+  //   icon: <PlusCircle />,
+  //   href: routes.token_manager,
+  // },
   // {
   //   name: 'Token Manager',
   //   icon: <VoteIcon />,

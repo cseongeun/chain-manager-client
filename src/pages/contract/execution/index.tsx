@@ -49,11 +49,11 @@ const ContractExecution: NextPageWithLayout = () => {
               </div>
               <div>
                 <h2 className="mb-2 text-base font-medium uppercase dark:text-gray-100 xl:text-lg">
-                  Managing Contract
+                  Executing Contract
                 </h2>
                 <p className="leading-relaxed text-gray-600 dark:text-gray-400">
-                  You can register a contract related to your wallet and manage
-                  it continuously.
+                  You can register the contract and continuously execute the
+                  necessary functions.
                 </p>
               </div>
             </div>

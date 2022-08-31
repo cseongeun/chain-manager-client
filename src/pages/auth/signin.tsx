@@ -33,9 +33,7 @@ function SignInPage({ providers, csrfToken }: SignInPageProps) {
   const [showPassword, setShowPassword] = useState(false);
 
   function goToSignUpPage() {
-    setTimeout(() => {
-      router.push(routes.signUp);
-    }, 800);
+    router.push(routes.sign_up);
   }
   return (
     <>
